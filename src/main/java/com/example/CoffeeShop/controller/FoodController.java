@@ -2,6 +2,7 @@ package com.example.CoffeeShop.controller;
 
 import com.example.CoffeeShop.food.Food;
 import com.example.CoffeeShop.food.FoodRepository;
+import com.example.CoffeeShop.food.FoodResponseDTO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,9 +20,9 @@ public class FoodController {
   private FoodRepository repository;
 
   @GetMapping
-  public List<Food> getAll() {
+  public List<FoodResponseDTO> getAll() {
     
-    List<Food> foodList = repository.findAll();
+    List<FoodResponseDTO> foodList = repository.findAll().stream().map(FoodResponseDTO::new).toList();
     
     return foodList;
   }
