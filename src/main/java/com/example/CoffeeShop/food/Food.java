@@ -39,5 +39,4 @@ public class Food {
   public void setPrice(Integer price) {
     this.price = price;
   }
-  
 }
