@@ -15,7 +15,6 @@ import com.example.CoffeeShop.funcionario.FuncionarioRequestDTO;
 
 import java.util.List;
 
-
 @RestController
 @RequestMapping("funcionario")
 public class FuncionarioController {
@@ -31,13 +30,14 @@ public class FuncionarioController {
     return;
 
   }
-  
+
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @GetMapping
   public List<FuncionarioReponseDTO> getAll() {
-    
-    List<FuncionarioReponseDTO> funcionarioList = repository.findAll().stream().map(FuncionarioReponseDTO::new).toList();
-    
+
+    List<FuncionarioReponseDTO> funcionarioList = repository.findAll().stream().map(FuncionarioReponseDTO::new)
+        .toList();
+
     return funcionarioList;
   }
 }
