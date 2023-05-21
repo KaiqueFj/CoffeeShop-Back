@@ -52,7 +52,7 @@ public class FuncionarioController {
 
   // Get the employer by Id
   @CrossOrigin(origins = "*", allowedHeaders = "*")
-  @GetMapping("/getBookById/{id_funcionario}")
+  @GetMapping("/getEmployeebyId/{id_funcionario}")
   public ResponseEntity<Funcionario> getBookById(@PathVariable Integer id_funcionario) {
     Optional<Funcionario> funcionarioData = repository.findById(id_funcionario);
     if (funcionarioData.isPresent()) {
