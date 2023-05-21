@@ -21,7 +21,7 @@ import com.example.CoffeeShop.model.Funcionario;
 import java.util.Optional;
 import java.util.List;
 
-@RequestMapping("cliente")
+@RequestMapping("funcionario")
 
 @RestController
 public class FuncionarioController {
