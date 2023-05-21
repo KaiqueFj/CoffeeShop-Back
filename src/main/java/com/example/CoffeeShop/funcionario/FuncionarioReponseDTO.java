@@ -1,5 +1,7 @@
 package com.example.CoffeeShop.funcionario;
 
+import com.example.CoffeeShop.model.Funcionario;
+
 public record FuncionarioReponseDTO(Integer id_funcionario, String nm_nome, String dt_admissao, String vl_salario,
     String ds_funcao) {
   public FuncionarioReponseDTO(Funcionario funcionario) {

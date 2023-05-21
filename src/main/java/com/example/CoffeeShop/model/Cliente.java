@@ -1,4 +1,6 @@
-package com.example.CoffeeShop.Fornecedor;
+package com.example.CoffeeShop.model;
+
+import com.example.CoffeeShop.cliente.ClienteRequestDTO;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,24 +12,22 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Table(name = "T_fornecedor")
-@Entity(name = "T_fornecedor")
+@Table(name = "T_cliente")
+@Entity(name = "T_cliente")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "id_fornecedor")
+@EqualsAndHashCode(of = "id_cliente")
 
-public class Fornecedor {
+public class Cliente {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id_fornecedor;
-  private String nm_fornecedor;
-  private String nm_email;
+  private Integer id_cliente;
+  private String nm_cliente;
 
-  public Fornecedor(FornecedorRequestDTO data) {
-    this.nm_fornecedor = data.nm_fornecedor();
-    this.nm_email = data.nm_email();
+  public Cliente(ClienteRequestDTO data) {
+    this.nm_cliente = data.nm_cliente();
   }
 
 }
