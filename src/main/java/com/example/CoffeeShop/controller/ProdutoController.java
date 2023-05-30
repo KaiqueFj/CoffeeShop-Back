@@ -30,7 +30,7 @@ public class ProdutoController {
 
   // Post the Product
   @CrossOrigin(origins = "*", allowedHeaders = "*")
-  @PostMapping("addUser/product")
+  @PostMapping("addProduct/product")
   public void saveProduto(@RequestBody ProdutoRequestDTO data) {
     Produto produtoData = new Produto(data);
     repository.save(produtoData);
