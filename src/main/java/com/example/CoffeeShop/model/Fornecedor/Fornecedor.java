@@ -34,7 +34,4 @@ public class Fornecedor {
     this.nm_email = data.nm_email();
   }
 
-  public void setEmail(String nm_email2) {
-  }
-
 }
