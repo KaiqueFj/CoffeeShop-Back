@@ -1,6 +1,4 @@
-package com.example.CoffeeShop.cliente;
-
-import com.example.CoffeeShop.model.Cliente;
+package com.example.CoffeeShop.model.cliente;
 
 public record ClienteResponseDTO(Integer id_cliente, String nm_cliente) {
   public ClienteResponseDTO(Cliente cliente) {

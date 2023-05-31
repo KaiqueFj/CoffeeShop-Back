@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.CoffeeShop.Fornecedor.FornecedorRepository;
-import com.example.CoffeeShop.Fornecedor.FornecedorRequestDTO;
-import com.example.CoffeeShop.Fornecedor.FornecedorResponseDTO;
-import com.example.CoffeeShop.model.Fornecedor;
+import com.example.CoffeeShop.model.Fornecedor.Fornecedor;
+import com.example.CoffeeShop.model.Fornecedor.FornecedorRepository;
+import com.example.CoffeeShop.model.Fornecedor.FornecedorRequestDTO;
+import com.example.CoffeeShop.model.Fornecedor.FornecedorResponseDTO;
 
 import java.util.List;
 import java.util.Optional;

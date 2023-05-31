@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.CoffeeShop.produto.ProdutoRepository;
-import com.example.CoffeeShop.produto.ProdutoRequestDTO;
-import com.example.CoffeeShop.produto.ProdutoResponseDTO;
 import com.example.CoffeeShop.model.Produto;
+import com.example.CoffeeShop.model.produto.ProdutoRepository;
+import com.example.CoffeeShop.model.produto.ProdutoRequestDTO;
+import com.example.CoffeeShop.model.produto.ProdutoResponseDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,10 +31,10 @@ public class ProdutoController {
   // Post the Product
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @PostMapping("addProduct/product")
-  public void saveProduto(@RequestBody ProdutoRequestDTO data) {
+  public Produto saveProduto(@RequestBody ProdutoRequestDTO data) {
     Produto produtoData = new Produto(data);
     repository.save(produtoData);
-    return;
+    return produtoData;
 
   }
 
