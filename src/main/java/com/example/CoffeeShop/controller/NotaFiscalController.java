@@ -13,14 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.CoffeeShop.model.cliente.Cliente;
 import com.example.CoffeeShop.model.notaFiscal.NotaFiscal;
-import com.example.CoffeeShop.repository.ClienteRepository;
 import com.example.CoffeeShop.repository.NotaFiscalRepository;
 import com.example.CoffeeShop.service.NotaFiscalDTO.NotaFiscalRequestDTO;
 import com.example.CoffeeShop.service.NotaFiscalDTO.NotaFiscalResponseDTO;
-import com.example.CoffeeShop.service.clienteDTO.ClienteRequestDTO;
-import com.example.CoffeeShop.service.clienteDTO.ClienteResponseDTO;
 
 import java.util.List;
 import java.util.Optional;
