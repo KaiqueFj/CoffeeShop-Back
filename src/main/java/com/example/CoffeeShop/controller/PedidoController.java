@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("cliente")
+@RequestMapping("pedido")
 public class PedidoController {
 
   @Autowired
