@@ -1,4 +1,4 @@
-package com.example.CoffeeShop.model.pedido;
+package com.example.CoffeeShop.service.PedidoDTO;
 
 import com.example.CoffeeShop.model.notaFiscal.NotaFiscal;
 

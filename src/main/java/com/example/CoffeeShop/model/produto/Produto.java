@@ -1,6 +1,6 @@
-package com.example.CoffeeShop.model;
+package com.example.CoffeeShop.model.produto;
 
-import com.example.CoffeeShop.model.produto.ProdutoRequestDTO;
+import com.example.CoffeeShop.service.ProdutoDTO.ProdutoRequestDTO;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

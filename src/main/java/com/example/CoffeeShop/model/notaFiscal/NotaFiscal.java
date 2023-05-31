@@ -1,5 +1,7 @@
 package com.example.CoffeeShop.model.notaFiscal;
 
+import com.example.CoffeeShop.service.NotaFiscalDTO.NotaFiscalRequestDTO;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.CoffeeShop.model.cliente.Cliente;
-import com.example.CoffeeShop.model.cliente.ClienteRepository;
-import com.example.CoffeeShop.model.cliente.ClienteRequestDTO;
-import com.example.CoffeeShop.model.cliente.ClienteResponseDTO;
+import com.example.CoffeeShop.repository.ClienteRepository;
+import com.example.CoffeeShop.service.clienteDTO.ClienteRequestDTO;
+import com.example.CoffeeShop.service.clienteDTO.ClienteResponseDTO;
 
 import java.util.List;
 import java.util.Optional;

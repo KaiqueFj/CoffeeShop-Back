@@ -1,5 +1,7 @@
 package com.example.CoffeeShop.model.pedido;
 
+import com.example.CoffeeShop.service.PedidoDTO.PedidoRequestDTO;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

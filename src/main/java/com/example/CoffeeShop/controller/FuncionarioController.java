@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.CoffeeShop.model.funcionario.Funcionario;
-import com.example.CoffeeShop.model.funcionario.FuncionarioReponseDTO;
-import com.example.CoffeeShop.model.funcionario.FuncionarioRepository;
-import com.example.CoffeeShop.model.funcionario.FuncionarioRequestDTO;
+import com.example.CoffeeShop.repository.FuncionarioRepository;
+import com.example.CoffeeShop.service.FuncionarioDTO.FuncionarioReponseDTO;
+import com.example.CoffeeShop.service.FuncionarioDTO.FuncionarioRequestDTO;
 
 import java.util.Optional;
 import java.util.List;
