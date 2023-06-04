@@ -32,11 +32,10 @@ public class FuncionarioController {
   // Add the employe in database
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @PostMapping("/addFuncionario")
-  public void saveFuncionario(@RequestBody FuncionarioRequestDTO data) {
+  public Funcionario saveFuncionario(@RequestBody FuncionarioRequestDTO data) {
     Funcionario funcionarioData = new Funcionario(data);
     repository.save(funcionarioData);
-    return;
-
+    return funcionarioData;
   }
 
   // Get all employer
@@ -91,6 +90,7 @@ public class FuncionarioController {
         updateFuncionarioData.setDt_admissao(newFuncionarioData.getDt_admissao());
         updateFuncionarioData.setVl_salario(newFuncionarioData.getVl_salario());
         updateFuncionarioData.setDs_funcao(newFuncionarioData.getDs_funcao());
+        updateFuncionarioData.setT_equipe_id_equipe(newFuncionarioData.getT_equipe_id_equipe());
 
         repository.save(updateFuncionarioData);
         return;

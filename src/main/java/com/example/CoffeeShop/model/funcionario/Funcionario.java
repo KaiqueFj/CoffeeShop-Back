@@ -1,7 +1,11 @@
 package com.example.CoffeeShop.model.funcionario;
 
+import java.util.List;
+
 import com.example.CoffeeShop.model.Equipe.Equipe;
 import com.example.CoffeeShop.service.FuncionarioDTO.FuncionarioRequestDTO;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.databind.deser.std.StringDeserializer;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -11,7 +15,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -37,15 +40,17 @@ public class Funcionario {
   private String vl_salario;
   private String ds_funcao;
 
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
-  @JoinColumn(name = "T_equipe_id_equipe", referencedColumnName = "id_equipe", nullable = false)
-  private Equipe equipeFK;
+  @JsonBackReference
+  @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+  @JoinColumn(name = "T_equipe_id_equipe", referencedColumnName = "id_equipe")
+  private Equipe T_equipe_id_equipe;
 
   public Funcionario(FuncionarioRequestDTO data) {
-    this.ds_funcao = data.ds_funcao();
-    this.vl_salario = data.vl_salario();
-    this.dt_admissao = data.dt_admissao();
     this.nm_nome = data.nm_nome();
+    this.dt_admissao = data.dt_admissao();
+    this.vl_salario = data.vl_salario();
+    this.ds_funcao = data.ds_funcao();
+    this.T_equipe_id_equipe = data.T_equipe_id_equipe();
   }
 
 }
