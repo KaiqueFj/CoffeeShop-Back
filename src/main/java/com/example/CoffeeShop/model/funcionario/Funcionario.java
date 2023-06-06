@@ -2,8 +2,6 @@ package com.example.CoffeeShop.model.funcionario;
 
 import com.example.CoffeeShop.model.Equipe.Equipe;
 import com.example.CoffeeShop.service.FuncionarioDTO.FuncionarioRequestDTO;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;

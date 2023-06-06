@@ -1,12 +1,10 @@
 package com.example.CoffeeShop.model.Equipe;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.example.CoffeeShop.model.funcionario.Funcionario;
 import com.example.CoffeeShop.service.EquipeDTO.EquipeRequestDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
