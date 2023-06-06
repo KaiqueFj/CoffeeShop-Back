@@ -4,6 +4,6 @@ import java.util.List;
 
 import com.example.CoffeeShop.model.funcionario.Funcionario;
 
-public record EquipeRequestDTO(String ds_descricao) {
+public record EquipeRequestDTO(String ds_descricao, List<Funcionario> funcionarios) {
 
 }

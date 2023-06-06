@@ -1,11 +1,9 @@
 package com.example.CoffeeShop.model.funcionario;
 
-import java.util.List;
-
 import com.example.CoffeeShop.model.Equipe.Equipe;
 import com.example.CoffeeShop.service.FuncionarioDTO.FuncionarioRequestDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.databind.deser.std.StringDeserializer;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -40,8 +38,7 @@ public class Funcionario {
   private String vl_salario;
   private String ds_funcao;
 
-  @JsonBackReference
-  @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+  @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
   @JoinColumn(name = "T_equipe_id_equipe", referencedColumnName = "id_equipe")
   private Equipe T_equipe_id_equipe;
 

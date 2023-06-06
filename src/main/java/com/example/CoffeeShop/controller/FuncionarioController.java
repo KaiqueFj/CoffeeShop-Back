@@ -31,7 +31,7 @@ public class FuncionarioController {
 
   // Add the employe in database
   @CrossOrigin(origins = "*", allowedHeaders = "*")
-  @PostMapping("/addFuncionario")
+  @PostMapping(path = "/addFuncionario", consumes = "application/json;charset=UTF-8", headers = "content-type=text/json")
   public Funcionario saveFuncionario(@RequestBody FuncionarioRequestDTO data) {
     Funcionario funcionarioData = new Funcionario(data);
     repository.save(funcionarioData);

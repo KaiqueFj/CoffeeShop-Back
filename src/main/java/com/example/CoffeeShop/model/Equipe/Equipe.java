@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.example.CoffeeShop.model.funcionario.Funcionario;
 import com.example.CoffeeShop.service.EquipeDTO.EquipeRequestDTO;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Entity;
@@ -36,12 +37,13 @@ public class Equipe {
   private Integer id_equipe;
   private String ds_descricao;
 
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "T_equipe_id_equipe")
-  @JsonManagedReference
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "T_equipe_id_equipe")
+  @JsonBackReference
   private List<Funcionario> funcionarios;
 
   public Equipe(EquipeRequestDTO data) {
     this.ds_descricao = data.ds_descricao();
+    this.funcionarios = data.funcionarios();
   }
 
 }
