@@ -51,7 +51,7 @@ public class ClienteController {
 
   // Get the client by Id
   @CrossOrigin(origins = "*", allowedHeaders = "*")
-  @GetMapping("/getClienteById/{id_cliente}")
+  @GetMapping("getClient/{id_cliente}")
   public ResponseEntity<Cliente> getBookById(@PathVariable Integer id_cliente) {
     Optional<Cliente> clienteData = repository.findById(id_cliente);
     if (clienteData.isPresent()) {

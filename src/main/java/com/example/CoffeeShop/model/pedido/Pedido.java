@@ -1,11 +1,20 @@
 package com.example.CoffeeShop.model.pedido;
 
+import java.time.LocalDate;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.example.CoffeeShop.model.cliente.Cliente;
 import com.example.CoffeeShop.service.PedidoDTO.PedidoRequestDTO;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -26,12 +35,18 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id_Pedido;
     String ds_pedido;
+    @DateTimeFormat(pattern = "dd-MM-YYYY") // For java.time.LocalDate or java.time.LocalDateTime
     String dt_pedido;
     String vl_pedido;
+
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @JoinColumn(name = "T_cliente_id_cliente", referencedColumnName = "id_cliente")
+    private Cliente T_cliente_id_cliente;
 
     public Pedido(PedidoRequestDTO data) {
         this.ds_pedido = data.ds_pedido();
         this.dt_pedido = data.dt_pedido();
         this.vl_pedido = data.vl_pedido();
+        this.T_cliente_id_cliente = data.T_cliente_id_cliente();
     }
 }

@@ -1,9 +1,12 @@
 package com.example.CoffeeShop.service.clienteDTO;
 
-import com.example.CoffeeShop.model.cliente.Cliente;
+import java.util.List;
 
-public record ClienteResponseDTO(Integer id_cliente, String nm_cliente) {
+import com.example.CoffeeShop.model.cliente.Cliente;
+import com.example.CoffeeShop.model.pedido.Pedido;
+
+public record ClienteResponseDTO(Integer id_cliente, String nm_cliente, List<Pedido> pedidos) {
   public ClienteResponseDTO(Cliente cliente) {
-    this(cliente.getId_cliente(), cliente.getNm_cliente());
+    this(cliente.getId_cliente(), cliente.getNm_cliente(), cliente.getPedidos());
   }
 }
