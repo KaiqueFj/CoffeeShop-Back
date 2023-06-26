@@ -1,5 +1,7 @@
 package com.example.CoffeeShop.service.NotaFiscalDTO;
 
-public record NotaFiscalRequestDTO(Integer nr_notaFiscal) {
+import com.example.CoffeeShop.model.pedido.Pedido;
+
+public record NotaFiscalRequestDTO(Integer nr_notafiscal, Pedido pedidos) {
 
 }

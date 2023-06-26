@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("notaFiscal")
+@RequestMapping("invoice")
 public class NotaFiscalController {
 
   @Autowired
@@ -63,7 +63,7 @@ public class NotaFiscalController {
 
   // Delete the Client by Id
   @CrossOrigin(origins = "*", allowedHeaders = "*")
-  @DeleteMapping("deleteInvoice/{id_notaFiscal}")
+  @DeleteMapping("/deleteInvoice/{id_notaFiscal}")
   private void deleteInvoice(@PathVariable Integer id_notaFiscal) {
     try {
       repository.deleteById(id_notaFiscal);
@@ -76,7 +76,7 @@ public class NotaFiscalController {
 
   // Update the Client by Id
   @CrossOrigin(origins = "*", allowedHeaders = "*")
-  @PutMapping("/updateNotaFiscal/{id_notaFiscal}")
+  @PutMapping("/updateInvoice/{id_notaFiscal}")
   private void updateClienteById(@PathVariable Integer id_notaFiscal,
       @RequestBody NotaFiscal newNotaFiscalData) {
 
@@ -85,7 +85,7 @@ public class NotaFiscalController {
 
       if (oldNotaFiscalData.isPresent()) {
         NotaFiscal updateNotaFiscalData = oldNotaFiscalData.get();
-        updateNotaFiscalData.setNr_notaFiscal(newNotaFiscalData.getNr_notaFiscal());
+        updateNotaFiscalData.setNr_notafiscal(newNotaFiscalData.getNr_notafiscal());
         repository.save(updateNotaFiscalData);
         return;
       }
