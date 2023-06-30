@@ -1,7 +1,5 @@
 package com.example.CoffeeShop.model.pedido;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import com.example.CoffeeShop.model.cliente.Cliente;
 import com.example.CoffeeShop.model.notaFiscal.NotaFiscal;
 import com.example.CoffeeShop.service.PedidoDTO.PedidoRequestDTO;
@@ -35,10 +33,10 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id_Pedido;
     String ds_pedido;
-    @DateTimeFormat(pattern = "dd-MM-YYYY") // For java.time.LocalDate or java.time.LocalDateTime
     String dt_pedido;
     String vl_pedido;
 
+    // Relantionships
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinColumn(name = "T_cliente_id_cliente", referencedColumnName = "id_cliente")
     private Cliente T_cliente_id_cliente;

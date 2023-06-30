@@ -31,54 +31,79 @@ public class PedidoController {
   // Post the Client
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @PostMapping("addPedido/Pedido")
-  public Pedido saveOrder(@RequestBody PedidoRequestDTO data) {
+  public ResponseEntity<Pedido> saveOrder(@RequestBody PedidoRequestDTO data) {
+    try {
+      Pedido pedidoData = new Pedido(data);
+      repository.save(pedidoData);
 
-    Pedido pedidoData = new Pedido(data);
-    repository.save(pedidoData);
-    return pedidoData;
+      return new ResponseEntity<>(pedidoData, HttpStatus.CREATED);
+
+    }
+
+    catch (Exception e) {
+      e.printStackTrace();
+      return new ResponseEntity<Pedido>(HttpStatus.BAD_REQUEST);
+
+    }
 
   }
 
   // Get all invoices
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @GetMapping("getAllOrders")
-  public List<PedidoResponseDTO> getAllOrders() {
 
-    List<PedidoResponseDTO> pedidoList = repository.findAll().stream().map(PedidoResponseDTO::new)
-        .toList();
+  public ResponseEntity<List<PedidoResponseDTO>> getAllOrders() {
+    try {
+      List<PedidoResponseDTO> pedidoList = repository.findAll().stream().map(PedidoResponseDTO::new)
+          .toList();
 
-    return pedidoList;
+      return new ResponseEntity<>(pedidoList, HttpStatus.OK);
+    } catch (Exception e) {
+      e.printStackTrace();
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+    }
   }
 
   // Get the client by Id
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @GetMapping("/getOrderById/{id_Pedido}")
   public ResponseEntity<Pedido> getOrderById(@PathVariable Integer id_Pedido) {
-    Optional<Pedido> PedidoData = repository.findById(id_Pedido);
-    if (PedidoData.isPresent()) {
-      return new ResponseEntity<>(PedidoData.get(), HttpStatus.OK);
-    } else {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    try {
+      Optional<Pedido> PedidoData = repository.findById(id_Pedido);
+      if (PedidoData.isPresent()) {
+        return new ResponseEntity<Pedido>(PedidoData.get(), HttpStatus.OK);
+      } else {
+        return new ResponseEntity<Pedido>(HttpStatus.NOT_FOUND);
+      }
     }
+
+    catch (Exception e) {
+      e.getMessage();
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+    }
+
   }
 
   // Delete the Client by Id
   @CrossOrigin(origins = "*", allowedHeaders = "*")
-  @DeleteMapping("deleteOrder/{id_Pedido}")
-  private void deleteOrderById(@PathVariable Integer id_Pedido) {
-    try {
-      repository.deleteById(id_Pedido);
-    }
+  @DeleteMapping("/deleteOrder/{id_Pedido}")
+  private ResponseEntity<String> deleteOrderById(@PathVariable Integer id_Pedido) {
+    boolean deleted = repository.existsById(id_Pedido);
 
-    catch (Exception e) {
-      e.printStackTrace();
+    if (deleted) {
+      repository.deleteById(id_Pedido);
+      return ResponseEntity.ok("Resource deleted successfully");
+    } else {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Resource not found");
     }
   }
 
   // Update the Client by Id
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @PutMapping("/updateOrderById/{id_Pedido}")
-  private void updateOrderById(@PathVariable Integer id_Pedido,
+  private ResponseEntity<Pedido> updateOrderById(@PathVariable Integer id_Pedido,
       @RequestBody Pedido newPedidoData) {
 
     try {
@@ -89,13 +114,18 @@ public class PedidoController {
         updatePedidoData.setDs_pedido(newPedidoData.getDs_pedido());
         updatePedidoData.setDt_pedido(newPedidoData.getDt_pedido());
         updatePedidoData.setVl_pedido(newPedidoData.getVl_pedido());
+        updatePedidoData.setT_cliente_id_cliente(newPedidoData.getT_cliente_id_cliente());
+        updatePedidoData.setT_Notafiscal_id_Notafiscal(newPedidoData.getT_Notafiscal_id_Notafiscal());
         repository.save(updatePedidoData);
-        return;
       }
+      return new ResponseEntity<Pedido>(HttpStatus.OK);
+
     }
 
     catch (Exception e) {
       e.printStackTrace();
+      return new ResponseEntity<Pedido>(HttpStatus.NOT_MODIFIED);
+
     }
   }
 }
