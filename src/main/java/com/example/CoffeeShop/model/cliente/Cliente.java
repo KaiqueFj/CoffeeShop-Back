@@ -4,11 +4,11 @@ import java.util.List;
 
 import com.example.CoffeeShop.model.pedido.Pedido;
 import com.example.CoffeeShop.service.clienteDTO.ClienteRequestDTO;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,6 +23,8 @@ import lombok.Setter;
 
 @Table(name = "T_cliente")
 @Entity(name = "T_cliente")
+@JsonIgnoreProperties("pedidos")
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -36,8 +38,8 @@ public class Cliente {
   private Integer id_cliente;
   private String nm_cliente;
 
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "T_cliente_id_cliente")
-  @JsonBackReference
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "T_cliente_id_cliente")
+  @JsonManagedReference(value = "order-info")
   private List<Pedido> pedidos;
 
   public Cliente(ClienteRequestDTO data) {

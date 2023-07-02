@@ -3,6 +3,8 @@ package com.example.CoffeeShop.model.notaFiscal;
 import com.example.CoffeeShop.model.pedido.Pedido;
 import com.example.CoffeeShop.service.NotaFiscalDTO.NotaFiscalRequestDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -20,6 +22,8 @@ import lombok.Setter;
 
 @Table(name = "T_Notafiscal ")
 @Entity(name = "T_Notafiscal ")
+@JsonIgnoreProperties("pedidos")
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -33,8 +37,8 @@ public class NotaFiscal {
     private Integer id_Notafiscal;
     private Integer nr_notafiscal;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "T_Notafiscal_id_Notafiscal")
-    @JsonBackReference
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "T_Notafiscal_id_Notafiscal")
+    @JsonManagedReference(value = "recipe-info")
     private Pedido pedidos;
 
     public NotaFiscal(NotaFiscalRequestDTO data) {

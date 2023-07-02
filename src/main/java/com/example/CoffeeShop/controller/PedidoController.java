@@ -2,6 +2,7 @@ package com.example.CoffeeShop.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -117,8 +118,10 @@ public class PedidoController {
         updatePedidoData.setT_cliente_id_cliente(newPedidoData.getT_cliente_id_cliente());
         updatePedidoData.setT_Notafiscal_id_Notafiscal(newPedidoData.getT_Notafiscal_id_Notafiscal());
         repository.save(updatePedidoData);
+        return new ResponseEntity<Pedido>(updatePedidoData, HttpStatus.OK);
+
       }
-      return new ResponseEntity<Pedido>(HttpStatus.OK);
+      return new ResponseEntity<Pedido>(HttpStatus.BAD_REQUEST);
 
     }
 
