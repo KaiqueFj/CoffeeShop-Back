@@ -31,11 +31,16 @@ public class NotaFiscalController {
   // Post the Client
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @PostMapping("addNotaFiscal/invoice")
-  public NotaFiscal saveInvoice(@RequestBody NotaFiscalRequestDTO data) {
-    NotaFiscal clienteData = new NotaFiscal(data);
-    repository.save(clienteData);
-    return clienteData;
+  public ResponseEntity<NotaFiscal> saveInvoice(@RequestBody NotaFiscalRequestDTO data) {
+    try {
+      NotaFiscal clienteData = new NotaFiscal(data);
+      repository.save(clienteData);
+      return new ResponseEntity<NotaFiscal>(clienteData, HttpStatus.CREATED);
+    }
 
+    catch (Exception e) {
+      return new ResponseEntity<NotaFiscal>(HttpStatus.BAD_REQUEST);
+    }
   }
 
   // Get all invoices
