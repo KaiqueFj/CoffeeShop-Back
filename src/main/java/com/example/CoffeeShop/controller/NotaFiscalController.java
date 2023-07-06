@@ -1,5 +1,6 @@
 package com.example.CoffeeShop.controller;
 
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,12 +47,16 @@ public class NotaFiscalController {
   // Get all invoices
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @GetMapping("getAllInvoices")
-  public List<NotaFiscalResponseDTO> getAllInvoices() {
+  public ResponseEntity<List<NotaFiscalResponseDTO>> getAllInvoices() {
+    try {
 
-    List<NotaFiscalResponseDTO> notaFiscalList = repository.findAll().stream().map(NotaFiscalResponseDTO::new)
-        .toList();
+      List<NotaFiscalResponseDTO> notaFiscalList = repository.findAll().stream().map(NotaFiscalResponseDTO::new)
+          .toList();
 
-    return notaFiscalList;
+      return new ResponseEntity<List<NotaFiscalResponseDTO>>(notaFiscalList, HttpStatus.FOUND);
+    } catch (Exception e) {
+      return new ResponseEntity<List<NotaFiscalResponseDTO>>(HttpStatus.BAD_REQUEST);
+    }
   }
 
   // Get the client by Id
@@ -69,20 +74,28 @@ public class NotaFiscalController {
   // Delete the Client by Id
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @DeleteMapping("/deleteInvoice/{id_notaFiscal}")
-  private void deleteInvoice(@PathVariable Integer id_notaFiscal) {
+  private ResponseEntity<String> deleteInvoice(@PathVariable Integer id_notaFiscal) {
     try {
-      repository.deleteById(id_notaFiscal);
+      boolean deleted = repository.existsById(id_notaFiscal);
+
+      if (deleted) {
+        repository.deleteById(id_notaFiscal);
+        return ResponseEntity.ok("Resouce Deleted successfully");
+      } else {
+        return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("Something went wrong, try again");
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("Something went wrong, try again");
+
     }
 
-    catch (Exception e) {
-      e.printStackTrace();
-    }
   }
 
   // Update the Client by Id
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @PutMapping("/updateInvoice/{id_notaFiscal}")
-  private void updateClienteById(@PathVariable Integer id_notaFiscal,
+  private ResponseEntity<NotaFiscal> updateClienteById(@PathVariable Integer id_notaFiscal,
       @RequestBody NotaFiscal newNotaFiscalData) {
 
     try {
@@ -93,12 +106,15 @@ public class NotaFiscalController {
         updateNotaFiscalData.setNr_notafiscal(newNotaFiscalData.getNr_notafiscal());
         updateNotaFiscalData.setPedidos(newNotaFiscalData.getPedidos());
         repository.save(updateNotaFiscalData);
-        return;
+        return new ResponseEntity<NotaFiscal>(updateNotaFiscalData, HttpStatus.OK);
+      } else {
+        return new ResponseEntity<NotaFiscal>(HttpStatus.BAD_REQUEST);
       }
     }
 
     catch (Exception e) {
       e.printStackTrace();
+      return new ResponseEntity<NotaFiscal>(HttpStatus.BAD_REQUEST);
     }
   }
 }
