@@ -31,16 +31,17 @@ public class EquipeController {
   // Save the dealer
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @PostMapping("/postTeam")
-  public void saveTeam(@RequestBody EquipeRequestDTO data) {
+  public ResponseEntity<Equipe> saveTeam(@RequestBody EquipeRequestDTO data) {
 
     try {
       Equipe equipeData = new Equipe(data);
       repository.save(equipeData);
-      return;
+      return new ResponseEntity<Equipe>(equipeData, HttpStatus.CREATED);
     }
 
     catch (Exception e) {
       e.printStackTrace();
+      return new ResponseEntity<Equipe>(HttpStatus.BAD_REQUEST);
     }
 
   }
@@ -48,12 +49,20 @@ public class EquipeController {
   // Get all dealers
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @GetMapping("/getAllTeams")
-  public List<EquipeResponseDTO> getAll() {
+  public ResponseEntity<List<EquipeResponseDTO>> getAll() {
+    try {
 
-    List<EquipeResponseDTO> equipeList = repository.findAll().stream().map(EquipeResponseDTO::new)
-        .toList();
+      List<EquipeResponseDTO> equipeList = repository.findAll().stream().map(EquipeResponseDTO::new)
+          .toList();
 
-    return equipeList;
+      return new ResponseEntity<List<EquipeResponseDTO>>(equipeList, HttpStatus.FOUND);
+    }
+
+    catch (Exception e) {
+      e.printStackTrace();
+      return new ResponseEntity<List<EquipeResponseDTO>>(HttpStatus.NOT_FOUND);
+    }
+
   }
 
   // Get the Dealer by Id
@@ -72,22 +81,28 @@ public class EquipeController {
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @DeleteMapping("teams/{id_equipe}")
   private ResponseEntity<String> deleteTeam(@PathVariable Integer id_equipe) {
+    try {
+      boolean deleted = repository.existsById(id_equipe);
 
-    boolean deleted = repository.existsById(id_equipe);
+      if (deleted) {
+        repository.deleteById(id_equipe);
+        return ResponseEntity.ok("Resource deleted successfully");
 
-    if (deleted) {
-      repository.deleteById(id_equipe);
-      return ResponseEntity.ok("Resource deleted successfully");
+      } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Resource not found");
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
 
-    } else {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Resource not found");
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Something went wrong");
     }
+
   }
 
   // Update the Dealer by Id
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @PutMapping("/updateTeamById/{id_equipe}")
-  private void updateTeamById(@PathVariable Integer id_equipe,
+  private ResponseEntity<Equipe> updateTeamById(@PathVariable Integer id_equipe,
       @RequestBody Equipe newEquipeData) {
 
     try {
@@ -97,12 +112,17 @@ public class EquipeController {
         Equipe updateEquipeData = oldEquipeData.get();
         updateEquipeData.setDs_descricao(newEquipeData.getDs_descricao());
         repository.save(updateEquipeData);
-        return;
+        return new ResponseEntity<Equipe>(updateEquipeData, HttpStatus.OK);
+      }
+
+      else {
+        return new ResponseEntity<Equipe>(HttpStatus.NOT_MODIFIED);
       }
     }
 
     catch (Exception e) {
       e.printStackTrace();
+      return new ResponseEntity<Equipe>(HttpStatus.NOT_MODIFIED);
     }
   }
 
