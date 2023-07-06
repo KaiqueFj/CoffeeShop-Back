@@ -37,11 +37,11 @@ public class Pedido {
     String vl_pedido;
 
     // Relantionships
-    @ManyToOne(cascade = { CascadeType.MERGE }, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REMOVE }, fetch = FetchType.EAGER)
     @JoinColumn(name = "T_cliente_id_cliente", referencedColumnName = "id_cliente")
     private Cliente T_cliente_id_cliente;
 
-    @OneToOne(cascade = { CascadeType.MERGE }, fetch = FetchType.EAGER)
+    @OneToOne(cascade = { CascadeType.MERGE, CascadeType.REMOVE }, fetch = FetchType.EAGER)
     @JoinColumn(name = "T_notafiscal_id_notafiscal", referencedColumnName = "id_Notafiscal")
     private NotaFiscal T_notafiscal_id_notafiscal;
 
