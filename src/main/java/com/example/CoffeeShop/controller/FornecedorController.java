@@ -31,16 +31,16 @@ public class FornecedorController {
   // Save the dealer
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @PostMapping("/postFornecedor")
-  public void saveFornecedor(@RequestBody FornecedorRequestDTO data) {
-
+  public ResponseEntity<Fornecedor> saveFornecedor(@RequestBody FornecedorRequestDTO data) {
     try {
       Fornecedor fornecedorData = new Fornecedor(data);
       repository.save(fornecedorData);
-      return;
+      return new ResponseEntity<Fornecedor>(fornecedorData, HttpStatus.CREATED);
     }
 
     catch (Exception e) {
       e.printStackTrace();
+      return new ResponseEntity<Fornecedor>(HttpStatus.BAD_REQUEST);
     }
 
   }
@@ -48,12 +48,18 @@ public class FornecedorController {
   // Get all dealers
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @GetMapping("/getAllFornecedor")
-  public List<FornecedorResponseDTO> getAll() {
+  public ResponseEntity<List<FornecedorResponseDTO>> getAll() {
+    try {
 
-    List<FornecedorResponseDTO> fornecedorList = repository.findAll().stream().map(FornecedorResponseDTO::new)
-        .toList();
+      List<FornecedorResponseDTO> fornecedorList = repository.findAll().stream().map(FornecedorResponseDTO::new)
+          .toList();
 
-    return fornecedorList;
+      return new ResponseEntity<List<FornecedorResponseDTO>>(fornecedorList, HttpStatus.FOUND);
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      return new ResponseEntity<List<FornecedorResponseDTO>>(HttpStatus.NOT_FOUND);
+    }
   }
 
   // Get the Dealer by Id
@@ -71,20 +77,31 @@ public class FornecedorController {
   // Delete the Dealer by Id
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @DeleteMapping("fornecedor/{id_fornecedor}")
-  private void deleteFornecedor(@PathVariable Integer id_fornecedor) {
+  private ResponseEntity<String> deleteFornecedor(@PathVariable Integer id_fornecedor) {
     try {
-      repository.deleteById(id_fornecedor);
+      boolean deleted = repository.existsById(id_fornecedor);
+
+      if (deleted) {
+        repository.deleteById(id_fornecedor);
+        return ResponseEntity.ok("Resouce Deleted successfully");
+      }
+
+      else {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Something went wrong, please try again");
+      }
     }
 
     catch (Exception e) {
       e.printStackTrace();
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Something went wrong, please try again");
+
     }
   }
 
   // Update the Dealer by Id
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @PutMapping("/updateFornecedor/{id_fornecedor}")
-  private void updateFornecedorById(@PathVariable Integer id_fornecedor,
+  private ResponseEntity<Fornecedor> updateFornecedorById(@PathVariable Integer id_fornecedor,
       @RequestBody Fornecedor newFornecedorData) {
 
     try {
@@ -96,12 +113,18 @@ public class FornecedorController {
         updateFornecedorData.setNm_email(newFornecedorData.getNm_email());
 
         repository.save(updateFornecedorData);
-        return;
+        return new ResponseEntity<Fornecedor>(updateFornecedorData, HttpStatus.OK);
+      }
+
+      else {
+        return new ResponseEntity<Fornecedor>(HttpStatus.NOT_MODIFIED);
       }
     }
 
     catch (Exception e) {
       e.printStackTrace();
+      return new ResponseEntity<Fornecedor>(HttpStatus.NOT_MODIFIED);
+
     }
   }
 
