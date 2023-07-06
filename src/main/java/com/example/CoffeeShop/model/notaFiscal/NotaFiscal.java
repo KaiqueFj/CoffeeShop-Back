@@ -37,8 +37,8 @@ public class NotaFiscal {
     private Integer id_Notafiscal;
     private Integer nr_notafiscal;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "T_Notafiscal_id_Notafiscal")
-    @JsonManagedReference(value = "recipe-info")
+    @OneToOne(mappedBy = "T_notafiscal_id_notafiscal")
+    @JsonBackReference(value = "recipe-info")
     private Pedido pedidos;
 
     public NotaFiscal(NotaFiscalRequestDTO data) {

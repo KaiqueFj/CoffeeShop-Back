@@ -2,7 +2,6 @@ package com.example.CoffeeShop.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,9 +38,7 @@ public class PedidoController {
 
       return new ResponseEntity<>(pedidoData, HttpStatus.CREATED);
 
-    }
-
-    catch (Exception e) {
+    } catch (Exception e) {
       e.printStackTrace();
       return new ResponseEntity<Pedido>(HttpStatus.BAD_REQUEST);
 
@@ -59,7 +56,7 @@ public class PedidoController {
           .toList();
 
       return new ResponseEntity<>(pedidoList, HttpStatus.OK);
-    } catch (Exception e) {
+    } catch (Error e) {
       e.printStackTrace();
       return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
@@ -80,8 +77,8 @@ public class PedidoController {
     }
 
     catch (Exception e) {
-      e.getMessage();
-      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+      e.printStackTrace();
+      return new ResponseEntity<Pedido>(HttpStatus.BAD_REQUEST);
 
     }
 
@@ -116,18 +113,19 @@ public class PedidoController {
         updatePedidoData.setDt_pedido(newPedidoData.getDt_pedido());
         updatePedidoData.setVl_pedido(newPedidoData.getVl_pedido());
         updatePedidoData.setT_cliente_id_cliente(newPedidoData.getT_cliente_id_cliente());
-        updatePedidoData.setT_Notafiscal_id_Notafiscal(newPedidoData.getT_Notafiscal_id_Notafiscal());
+        updatePedidoData.setT_notafiscal_id_notafiscal(newPedidoData.getT_notafiscal_id_notafiscal());
         repository.save(updatePedidoData);
         return new ResponseEntity<Pedido>(updatePedidoData, HttpStatus.OK);
 
-      }
-      return new ResponseEntity<Pedido>(HttpStatus.BAD_REQUEST);
+      } else {
+        return new ResponseEntity<Pedido>(HttpStatus.NOT_MODIFIED);
 
+      }
     }
 
     catch (Exception e) {
       e.printStackTrace();
-      return new ResponseEntity<Pedido>(HttpStatus.NOT_MODIFIED);
+      return new ResponseEntity<Pedido>(HttpStatus.BAD_REQUEST);
 
     }
   }

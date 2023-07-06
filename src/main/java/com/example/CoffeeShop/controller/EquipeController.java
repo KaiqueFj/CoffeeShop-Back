@@ -71,13 +71,16 @@ public class EquipeController {
   // Delete the Dealer by Id
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @DeleteMapping("teams/{id_equipe}")
-  private void deleteTeam(@PathVariable Integer id_equipe) {
-    try {
-      repository.deleteById(id_equipe);
-    }
+  private ResponseEntity<String> deleteTeam(@PathVariable Integer id_equipe) {
 
-    catch (Exception e) {
-      e.printStackTrace();
+    boolean deleted = repository.existsById(id_equipe);
+
+    if (deleted) {
+      repository.deleteById(id_equipe);
+      return ResponseEntity.ok("Resource deleted successfully");
+
+    } else {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Resource not found");
     }
   }
 

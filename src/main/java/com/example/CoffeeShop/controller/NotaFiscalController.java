@@ -86,6 +86,7 @@ public class NotaFiscalController {
       if (oldNotaFiscalData.isPresent()) {
         NotaFiscal updateNotaFiscalData = oldNotaFiscalData.get();
         updateNotaFiscalData.setNr_notafiscal(newNotaFiscalData.getNr_notafiscal());
+        updateNotaFiscalData.setPedidos(newNotaFiscalData.getPedidos());
         repository.save(updateNotaFiscalData);
         return;
       }

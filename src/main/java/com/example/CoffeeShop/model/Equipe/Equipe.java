@@ -1,5 +1,6 @@
 package com.example.CoffeeShop.model.Equipe;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.example.CoffeeShop.model.funcionario.Funcionario;
@@ -37,7 +38,7 @@ public class Equipe {
 
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "T_equipe_id_equipe")
   @JsonBackReference
-  private List<Funcionario> funcionarios;
+  private List<Funcionario> funcionarios = new ArrayList<Funcionario>();
 
   public Equipe(EquipeRequestDTO data) {
     this.ds_descricao = data.ds_descricao();
