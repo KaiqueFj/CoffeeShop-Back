@@ -31,22 +31,31 @@ public class ProdutoController {
   // Post the Product
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @PostMapping("addProduct/product")
-  public Produto saveProduto(@RequestBody ProdutoRequestDTO data) {
-    Produto produtoData = new Produto(data);
-    repository.save(produtoData);
-    return produtoData;
+  public ResponseEntity<Produto> saveProduto(@RequestBody ProdutoRequestDTO data) {
+    try {
+      Produto produtoData = new Produto(data);
+      repository.save(produtoData);
+      return new ResponseEntity<Produto>(produtoData, HttpStatus.OK);
+    }
 
+    catch (Exception e) {
+      e.printStackTrace();
+      return new ResponseEntity<Produto>(HttpStatus.BAD_REQUEST);
+    }
   }
 
   // Get all products
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @GetMapping("getAllProducts")
-  public List<ProdutoResponseDTO> getAll() {
+  public ResponseEntity<List<ProdutoResponseDTO>> getAll() {
+    try {
+      List<ProdutoResponseDTO> produtoList = repository.findAll().stream().map(ProdutoResponseDTO::new)
+          .toList();
+      return new ResponseEntity<List<ProdutoResponseDTO>>(produtoList, HttpStatus.FOUND);
+    } catch (Exception e) {
+      return new ResponseEntity<List<ProdutoResponseDTO>>(HttpStatus.NOT_FOUND);
+    }
 
-    List<ProdutoResponseDTO> produtoList = repository.findAll().stream().map(ProdutoResponseDTO::new)
-        .toList();
-
-    return produtoList;
   }
 
   // Get the product by Id
@@ -64,20 +73,31 @@ public class ProdutoController {
   // Delete the Product by Id
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @DeleteMapping("deleteProduct/{id_produto}")
-  private void deleteProduct(@PathVariable Integer id_produto) {
+  private ResponseEntity<String> deleteProduct(@PathVariable Integer id_produto) {
     try {
-      repository.deleteById(id_produto);
+      boolean deleted = repository.existsById(id_produto);
+
+      if (deleted) {
+        repository.deleteById(id_produto);
+        return ResponseEntity.ok("Resouce Deleted successfully");
+      }
+
+      else {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Resouce Deleted successfully");
+      }
     }
 
     catch (Exception e) {
       e.printStackTrace();
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Resouce Deleted successfully");
+
     }
   }
 
   // Update the Product by Id
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @PutMapping("/updateProduct/{id_produto}")
-  private void updateProdutoById(@PathVariable Integer id_produto,
+  private ResponseEntity<Produto> updateProdutoById(@PathVariable Integer id_produto,
       @RequestBody Produto newProdutoData) {
 
     try {
@@ -90,12 +110,18 @@ public class ProdutoController {
         updateProdutoData.setQt_produto(newProdutoData.getQt_produto());
 
         repository.save(updateProdutoData);
-        return;
+        return new ResponseEntity<Produto>(updateProdutoData, HttpStatus.OK);
+      }
+
+      else {
+        return new ResponseEntity<Produto>(HttpStatus.NOT_MODIFIED);
+
       }
     }
 
     catch (Exception e) {
       e.printStackTrace();
+      return new ResponseEntity<Produto>(HttpStatus.NOT_MODIFIED);
     }
   }
 }
