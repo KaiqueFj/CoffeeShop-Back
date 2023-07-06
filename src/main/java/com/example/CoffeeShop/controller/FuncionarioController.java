@@ -1,5 +1,6 @@
 package com.example.CoffeeShop.controller;
 
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,21 +33,34 @@ public class FuncionarioController {
   // Add the employe in database
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @PostMapping(path = "/addFuncionario", consumes = "application/json;charset=UTF-8", headers = "content-type=text/json")
-  public Funcionario saveFuncionario(@RequestBody FuncionarioRequestDTO data) {
-    Funcionario funcionarioData = new Funcionario(data);
-    repository.save(funcionarioData);
-    return funcionarioData;
+  public ResponseEntity<Funcionario> saveFuncionario(@RequestBody FuncionarioRequestDTO data) {
+    try {
+      Funcionario funcionarioData = new Funcionario(data);
+      repository.save(funcionarioData);
+      return new ResponseEntity<Funcionario>(funcionarioData, HttpStatus.CREATED);
+    }
+
+    catch (Exception e) {
+      return new ResponseEntity<Funcionario>(HttpStatus.BAD_REQUEST);
+    }
   }
 
   // Get all employer
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @GetMapping("/getAllFuncionarios")
-  public List<FuncionarioReponseDTO> getAll() {
+  public ResponseEntity<List<FuncionarioReponseDTO>> getAll() {
+    try {
 
-    List<FuncionarioReponseDTO> funcionarioList = repository.findAll().stream().map(FuncionarioReponseDTO::new)
-        .toList();
+      List<FuncionarioReponseDTO> funcionarioList = repository.findAll().stream().map(FuncionarioReponseDTO::new)
+          .toList();
 
-    return funcionarioList;
+      return new ResponseEntity<List<FuncionarioReponseDTO>>(funcionarioList, HttpStatus.FOUND);
+    }
+
+    catch (Exception e) {
+      return new ResponseEntity<List<FuncionarioReponseDTO>>(HttpStatus.NOT_FOUND);
+    }
+
   }
 
   // Get the employer by Id
@@ -64,20 +78,28 @@ public class FuncionarioController {
   // Delete the employer by Id
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @DeleteMapping("deleteFuncionarioByid/{id_funcionario}")
-  private void deleteFornecedor(@PathVariable Integer id_funcionario) {
+  private ResponseEntity<String> deleteFornecedor(@PathVariable Integer id_funcionario) {
     try {
-      repository.deleteById(id_funcionario);
+      boolean deleted = repository.existsById(id_funcionario);
+
+      if (deleted) {
+        repository.deleteById(id_funcionario);
+        return ResponseEntity.ok("Resouce Deleted successfully");
+      } else {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Something went wrong, try again");
+      }
     }
 
     catch (Exception e) {
       e.printStackTrace();
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Something went wrong, try again");
     }
   }
 
   // Update the employe data
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @PutMapping("/updateFuncionario/{id_funcionario}")
-  private void updateFuncionariobyId(@PathVariable Integer id_funcionario,
+  private ResponseEntity<Funcionario> updateFuncionariobyId(@PathVariable Integer id_funcionario,
       @RequestBody Funcionario newFuncionarioData) {
 
     try {
@@ -93,12 +115,15 @@ public class FuncionarioController {
         updateFuncionarioData.setT_equipe_id_equipe(newFuncionarioData.getT_equipe_id_equipe());
 
         repository.save(updateFuncionarioData);
-        return;
+        return new ResponseEntity<Funcionario>(updateFuncionarioData, HttpStatus.OK);
+      } else {
+        return new ResponseEntity<Funcionario>(HttpStatus.BAD_REQUEST);
       }
     }
 
     catch (Exception e) {
       e.printStackTrace();
+      return new ResponseEntity<Funcionario>(HttpStatus.BAD_REQUEST);
     }
   }
 }
