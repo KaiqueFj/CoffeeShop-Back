@@ -1,5 +1,7 @@
 package com.example.CoffeeShop.service.ProdutoDTO;
 
-public record ProdutoRequestDTO(String nm_produto, String vl_produto, Integer qt_produto) {
+import com.example.CoffeeShop.model.pedido.Pedido;
+
+public record ProdutoRequestDTO(String nm_produto, String vl_produto, Integer qt_produto, Pedido T_pedido_id_pedido) {
 
 }

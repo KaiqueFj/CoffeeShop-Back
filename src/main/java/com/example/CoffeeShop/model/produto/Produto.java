@@ -1,11 +1,17 @@
 package com.example.CoffeeShop.model.produto;
 
+import com.example.CoffeeShop.model.Equipe.Equipe;
+import com.example.CoffeeShop.model.pedido.Pedido;
 import com.example.CoffeeShop.service.ProdutoDTO.ProdutoRequestDTO;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -30,10 +36,15 @@ public class Produto {
   private String vl_produto;
   private Integer qt_produto;
 
+  @ManyToOne(cascade = { CascadeType.MERGE }, fetch = FetchType.EAGER)
+  @JoinColumn(name = "T_pedido_id_pedido", referencedColumnName = "id_Pedido")
+  private Pedido T_pedido_id_pedido;
+
   public Produto(ProdutoRequestDTO data) {
     this.nm_produto = data.nm_produto();
     this.vl_produto = data.vl_produto();
     this.qt_produto = data.qt_produto();
+    this.T_pedido_id_pedido = data.T_pedido_id_pedido();
   }
 
 }

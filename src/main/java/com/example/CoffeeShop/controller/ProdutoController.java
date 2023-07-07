@@ -108,6 +108,7 @@ public class ProdutoController {
         updateProdutoData.setNm_produto(newProdutoData.getNm_produto());
         updateProdutoData.setVl_produto(newProdutoData.getVl_produto());
         updateProdutoData.setQt_produto(newProdutoData.getQt_produto());
+        updateProdutoData.setT_pedido_id_pedido(newProdutoData.getT_pedido_id_pedido());
 
         repository.save(updateProdutoData);
         return new ResponseEntity<Produto>(updateProdutoData, HttpStatus.OK);
