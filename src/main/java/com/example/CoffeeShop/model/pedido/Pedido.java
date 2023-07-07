@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.CoffeeShop.model.cliente.Cliente;
-import com.example.CoffeeShop.model.funcionario.Funcionario;
 import com.example.CoffeeShop.model.notaFiscal.NotaFiscal;
 import com.example.CoffeeShop.model.produto.Produto;
 import com.example.CoffeeShop.service.PedidoDTO.PedidoRequestDTO;

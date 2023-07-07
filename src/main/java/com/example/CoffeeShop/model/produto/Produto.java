@@ -1,6 +1,5 @@
 package com.example.CoffeeShop.model.produto;
 
-import com.example.CoffeeShop.model.Equipe.Equipe;
 import com.example.CoffeeShop.model.pedido.Pedido;
 import com.example.CoffeeShop.service.ProdutoDTO.ProdutoRequestDTO;
 
