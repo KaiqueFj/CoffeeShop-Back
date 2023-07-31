@@ -78,7 +78,7 @@ public class EstoqueController {
   // Delete the Client by Id
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @DeleteMapping("deleteStock/{id_estoque}")
-  private ResponseEntity<String> deleteCliente(@PathVariable Integer id_estoque) {
+  private ResponseEntity<String> deleteStock(@PathVariable Integer id_estoque) {
     try {
       boolean deleted = repository.existsById(id_estoque);
 

@@ -40,7 +40,7 @@ public class Produto {
   @JoinColumn(name = "T_pedido_id_pedido", referencedColumnName = "id_Pedido")
   private Pedido T_pedido_id_pedido;
 
-  @ManyToOne(cascade = { CascadeType.MERGE }, fetch = FetchType.EAGER)
+  @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.DETACH }, fetch = FetchType.EAGER)
   @JoinColumn(name = "T_estoque_id_estoque", referencedColumnName = "id_estoque")
   private Estoque T_estoque_id_estoque;
 
