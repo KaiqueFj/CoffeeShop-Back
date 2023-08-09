@@ -1,5 +1,7 @@
 package com.example.CoffeeShop.service.UserDTO;
 
-public record UserRequestDTO(String ds_login, String ds_password, String ds_role) {
+import com.example.CoffeeShop.model.User.UserRole;
+
+public record UserRequestDTO(String ds_login, String ds_password, UserRole ds_role) {
 
 }
