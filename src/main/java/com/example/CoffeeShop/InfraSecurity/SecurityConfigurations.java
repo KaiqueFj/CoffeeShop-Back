@@ -35,6 +35,14 @@ public class SecurityConfigurations {
             .requestMatchers(HttpMethod.GET, "/funcionario/getEmployeebyId/{id_funcionario}").hasRole("ADMIN")
             .requestMatchers(HttpMethod.DELETE, "/funcionario/deleteFuncionarioByid/{id_funcionario}").hasRole("ADMIN")
             .requestMatchers(HttpMethod.PUT, "/funcionario/updateFuncionario/{id_funcionario}").hasRole("ADMIN")
+            //
+
+            .requestMatchers(HttpMethod.POST, "/dealer/postFornecedor").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.GET, "/dealer/getAllFornecedor").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.GET, "/dealer/getdealerById/{id_fornecedor}").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.DELETE, "/dealer/deleteDealer/{id_fornecedor}").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.PUT, "/dealer/updateFornecedor/{id_fornecedor}").hasRole("ADMIN")
+            //
 
             .requestMatchers(HttpMethod.POST, "/cliente/addUser/client").hasRole("ADMIN")
             .requestMatchers(HttpMethod.GET, "/cliente/getAllClients").hasRole("ADMIN")

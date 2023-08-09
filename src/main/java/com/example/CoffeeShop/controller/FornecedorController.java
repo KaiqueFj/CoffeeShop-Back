@@ -76,7 +76,7 @@ public class FornecedorController {
 
   // Delete the Dealer by Id
   @CrossOrigin(origins = "*", allowedHeaders = "*")
-  @DeleteMapping("fornecedor/{id_fornecedor}")
+  @DeleteMapping("/deleteDealer/{id_fornecedor}")
   private ResponseEntity<String> deleteFornecedor(@PathVariable Integer id_fornecedor) {
     try {
       boolean deleted = repository.existsById(id_fornecedor);
