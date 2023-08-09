@@ -74,9 +74,9 @@ public class SecurityConfigurations {
 
             .requestMatchers(HttpMethod.POST, "/invoice/addNotaFiscal/invoice").hasRole("ADMIN")
             .requestMatchers(HttpMethod.GET, "/invoice/getAllInvoices").hasRole("ADMIN")
-            .requestMatchers(HttpMethod.GET, "/invoice/getInvoiceById/{id_pedido}").hasRole("ADMIN")
-            .requestMatchers(HttpMethod.DELETE, "/invoice/deleteInvoice/{id_pedido}").hasRole("ADMIN")
-            .requestMatchers(HttpMethod.PUT, "/invoice/updateInvoice/{id_pedido}").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.GET, "/invoice/getInvoiceById/{id_notaFiscal}").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.DELETE, "/invoice/deleteInvoice/{id_notaFiscal}").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.PUT, "/invoice/updateInvoice/{id_notaFiscal}").hasRole("ADMIN")
             //
 
             .requestMatchers(HttpMethod.POST, "/cliente/addUser/client").hasRole("ADMIN")
