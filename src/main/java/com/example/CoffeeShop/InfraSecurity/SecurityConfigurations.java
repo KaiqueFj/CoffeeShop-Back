@@ -29,7 +29,19 @@ public class SecurityConfigurations {
         .authorizeHttpRequests(authorize -> authorize
             .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
             .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
+            //
+            .requestMatchers(HttpMethod.POST, "/funcionario/addFuncionario").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.GET, "/funcionario/getAllFuncionarios").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.GET, "/funcionario/getEmployeebyId/{id_funcionario}").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.DELETE, "/funcionario/deleteFuncionarioByid/{id_funcionario}").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.PUT, "/funcionario/updateFuncionario/{id_funcionario}").hasRole("ADMIN")
+
+            .requestMatchers(HttpMethod.POST, "/cliente/addUser/client").hasRole("ADMIN")
             .requestMatchers(HttpMethod.GET, "/cliente/getAllClients").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.GET, "/cliente/getClient/{id_cliente}").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.DELETE, "/cliente/deleteClient/{id_cliente}").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.PUT, "/cliente/updateClient/{id_cliente}").hasRole("ADMIN")
+
             .anyRequest().authenticated())
         .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
         .build();
