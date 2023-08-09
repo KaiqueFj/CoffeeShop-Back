@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.CoffeeShop.InfraSecurity.TokenService;
 import com.example.CoffeeShop.model.User.User;
 import com.example.CoffeeShop.repository.UserRepository;
 import com.example.CoffeeShop.service.UserDTO.AuthenticationDTO;
+import com.example.CoffeeShop.service.UserDTO.LoginResponseDTO;
 import com.example.CoffeeShop.service.UserDTO.RegisterDTO;
 import com.example.CoffeeShop.service.UserDTO.UserRequestDTO;
 
@@ -27,13 +29,18 @@ public class AuthenticationController {
   @Autowired
   private UserRepository repository;
 
+  @Autowired
+  private TokenService tokenService;
+
   // Post the Client
   @PostMapping("/login")
   public ResponseEntity login(@RequestBody @Validated AuthenticationDTO data) {
 
     var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.ds_password());
     var auth = this.authenticationManager.authenticate(usernamePassword);
-    return ResponseEntity.ok().build();
+    var token = tokenService.generateToken((User) auth.getPrincipal());
+
+    return ResponseEntity.ok(new LoginResponseDTO(token));
 
   }
 
