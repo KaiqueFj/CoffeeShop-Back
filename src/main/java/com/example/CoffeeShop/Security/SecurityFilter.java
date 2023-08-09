@@ -1,4 +1,4 @@
-package com.example.CoffeeShop.InfraSecurity;
+package com.example.CoffeeShop.Security;
 
 import java.io.IOException;
 

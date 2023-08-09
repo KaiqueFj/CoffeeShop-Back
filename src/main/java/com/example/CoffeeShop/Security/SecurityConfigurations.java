@@ -1,4 +1,4 @@
-package com.example.CoffeeShop.InfraSecurity;
+package com.example.CoffeeShop.Security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -70,6 +70,13 @@ public class SecurityConfigurations {
             .requestMatchers(HttpMethod.GET, "/pedido/getOrderById/{id_pedido}").hasRole("ADMIN")
             .requestMatchers(HttpMethod.DELETE, "/pedido/deleteOrder/{id_pedido}").hasRole("ADMIN")
             .requestMatchers(HttpMethod.PUT, "/pedido/updateOrderById/{id_pedido}").hasRole("ADMIN")
+            //
+
+            .requestMatchers(HttpMethod.POST, "/invoice/addNotaFiscal/invoice").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.GET, "/invoice/getAllInvoices").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.GET, "/invoice/getInvoiceById/{id_notaFiscal}").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.DELETE, "/invoice/deleteInvoice/{id_notaFiscal}").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.PUT, "/invoice/updateInvoice/{id_notaFiscal}").hasRole("ADMIN")
             //
 
             .requestMatchers(HttpMethod.POST, "/invoice/addNotaFiscal/invoice").hasRole("ADMIN")

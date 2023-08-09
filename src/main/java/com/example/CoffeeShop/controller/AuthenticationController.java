@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.CoffeeShop.InfraSecurity.TokenService;
+import com.example.CoffeeShop.Security.TokenService;
 import com.example.CoffeeShop.model.User.User;
 import com.example.CoffeeShop.repository.UserRepository;
 import com.example.CoffeeShop.service.UserDTO.AuthenticationDTO;
