@@ -44,6 +44,20 @@ public class SecurityConfigurations {
             .requestMatchers(HttpMethod.PUT, "/dealer/updateFornecedor/{id_fornecedor}").hasRole("ADMIN")
             //
 
+            .requestMatchers(HttpMethod.POST, "/produto/addProduct/product").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.GET, "/produto/getAllProducts").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.GET, "/produto/getProdutoById/{id_produto}").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.DELETE, "/produto/deleteProduct/{id_produto}").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.PUT, "/produto/updateProduct/{id_produto}").hasRole("ADMIN")
+            //
+
+            .requestMatchers(HttpMethod.POST, "/stock/addstock").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.GET, "/stock/getAllStock").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.GET, "/stock/getStock/{id_estoque}").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.DELETE, "/stock/deleteStock/{id_estoque}").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.PUT, "/produto/updateStock/{id_estoque}").hasRole("ADMIN")
+            //
+
             .requestMatchers(HttpMethod.POST, "/cliente/addUser/client").hasRole("ADMIN")
             .requestMatchers(HttpMethod.GET, "/cliente/getAllClients").hasRole("ADMIN")
             .requestMatchers(HttpMethod.GET, "/cliente/getClient/{id_cliente}").hasRole("ADMIN")
