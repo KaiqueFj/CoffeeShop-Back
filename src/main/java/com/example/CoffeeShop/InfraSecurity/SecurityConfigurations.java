@@ -65,6 +65,13 @@ public class SecurityConfigurations {
             .requestMatchers(HttpMethod.PUT, "/team/updateTeamById/{id_equipe}").hasRole("ADMIN")
             //
 
+            .requestMatchers(HttpMethod.POST, "/pedido/addPedido/Pedido").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.GET, "/pedido/getAllOrders").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.GET, "/pedido/getOrderById/{id_pedido}").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.DELETE, "/pedido/deleteOrder/{id_pedido}").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.PUT, "/pedido/updateOrderById/{id_pedido}").hasRole("ADMIN")
+            //
+
             .requestMatchers(HttpMethod.POST, "/cliente/addUser/client").hasRole("ADMIN")
             .requestMatchers(HttpMethod.GET, "/cliente/getAllClients").hasRole("ADMIN")
             .requestMatchers(HttpMethod.GET, "/cliente/getClient/{id_cliente}").hasRole("ADMIN")
