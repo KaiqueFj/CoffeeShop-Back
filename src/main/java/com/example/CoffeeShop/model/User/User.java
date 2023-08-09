@@ -34,12 +34,18 @@ public class User implements UserDetails {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id_user;
-  private String ds_login;
+  private String login;
   private String ds_password;
   private UserRole ds_role;
 
+  public User(String login, String ds_password, UserRole ds_role) {
+    this.login = login;
+    this.ds_password = ds_password;
+    this.ds_role = ds_role;
+  }
+
   public User(UserRequestDTO data) {
-    this.ds_login = data.ds_login();
+    this.login = data.login();
     this.ds_password = data.ds_password();
     this.ds_role = data.ds_role();
   }
@@ -62,7 +68,7 @@ public class User implements UserDetails {
   @Override
   public String getUsername() {
 
-    return ds_login;
+    return login;
   }
 
   @Override
@@ -85,6 +91,6 @@ public class User implements UserDetails {
 
   @Override
   public boolean isEnabled() {
-    throw new UnsupportedOperationException("Unimplemented method 'isEnabled'");
+    return true;
   }
 }
