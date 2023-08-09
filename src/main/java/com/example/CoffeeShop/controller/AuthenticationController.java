@@ -1,7 +1,6 @@
 package com.example.CoffeeShop.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,7 +17,6 @@ import com.example.CoffeeShop.repository.UserRepository;
 import com.example.CoffeeShop.service.UserDTO.AuthenticationDTO;
 import com.example.CoffeeShop.service.UserDTO.LoginResponseDTO;
 import com.example.CoffeeShop.service.UserDTO.RegisterDTO;
-import com.example.CoffeeShop.service.UserDTO.UserRequestDTO;
 
 @RestController
 @RequestMapping("auth")
