@@ -58,6 +58,13 @@ public class SecurityConfigurations {
             .requestMatchers(HttpMethod.PUT, "/produto/updateStock/{id_estoque}").hasRole("ADMIN")
             //
 
+            .requestMatchers(HttpMethod.POST, "/team/postTeam").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.GET, "/team/getAllTeams").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.GET, "/team/getTeamById/{id_equipe}").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.DELETE, "/team/deleteTeam/{id_equipe}").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.PUT, "/team/updateTeamById/{id_equipe}").hasRole("ADMIN")
+            //
+
             .requestMatchers(HttpMethod.POST, "/cliente/addUser/client").hasRole("ADMIN")
             .requestMatchers(HttpMethod.GET, "/cliente/getAllClients").hasRole("ADMIN")
             .requestMatchers(HttpMethod.GET, "/cliente/getClient/{id_cliente}").hasRole("ADMIN")

@@ -79,7 +79,7 @@ public class EquipeController {
 
   // Delete the Dealer by Id
   @CrossOrigin(origins = "*", allowedHeaders = "*")
-  @DeleteMapping("teams/{id_equipe}")
+  @DeleteMapping("deleteTeam/{id_equipe}")
   private ResponseEntity<String> deleteTeam(@PathVariable Integer id_equipe) {
     try {
       boolean deleted = repository.existsById(id_equipe);
