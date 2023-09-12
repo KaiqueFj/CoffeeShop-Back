@@ -6,6 +6,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +33,7 @@ public class AuthenticationController {
 
   // Post the Client
   @PostMapping("/login")
+  @CrossOrigin(origins = "http://localhost:3000")
   public ResponseEntity login(@RequestBody @Validated AuthenticationDTO data) {
 
     var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.ds_password());
@@ -43,6 +45,8 @@ public class AuthenticationController {
   }
 
   @PostMapping("/register")
+  @CrossOrigin(origins = "http://localhost:3000")
+
   public ResponseEntity register(@RequestBody @Validated RegisterDTO data) {
     if (this.repository.findByLogin(data.login()) != null)
       return ResponseEntity.badRequest().build();
