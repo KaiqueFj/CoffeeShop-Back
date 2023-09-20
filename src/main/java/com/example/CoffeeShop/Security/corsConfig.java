@@ -13,7 +13,7 @@ public class corsConfig {
   public CorsFilter corsFilter() {
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     CorsConfiguration config = new CorsConfiguration();
-    config.addAllowedOrigin("http://localhost:3000"); // Domínio do seu frontend
+    config.addAllowedOrigin("http://localhost:3000"); // Domínio frontend
     config.addAllowedHeader("*");
     config.addAllowedMethod("*");
     source.registerCorsConfiguration("/**", config);

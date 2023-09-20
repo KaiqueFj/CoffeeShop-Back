@@ -118,7 +118,7 @@ public class PedidoController {
         return new ResponseEntity<Pedido>(updatePedidoData, HttpStatus.OK);
 
       } else {
-        return new ResponseEntity<Pedido>(HttpStatus.NOT_MODIFIED);
+        return new ResponseEntity<Pedido>(newPedidoData, HttpStatus.NOT_MODIFIED);
 
       }
     }
