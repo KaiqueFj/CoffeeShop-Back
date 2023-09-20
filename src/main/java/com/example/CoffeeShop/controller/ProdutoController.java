@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.CoffeeShop.model.produto.Produto;
 import com.example.CoffeeShop.repository.ProdutoRepository;
+import com.example.CoffeeShop.service.Exception.CustomException;
 import com.example.CoffeeShop.service.ProdutoDTO.ProdutoRequestDTO;
 import com.example.CoffeeShop.service.ProdutoDTO.ProdutoResponseDTO;
 
@@ -31,7 +32,7 @@ public class ProdutoController {
   // Post the Product
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @PostMapping("addProduct/product")
-  public ResponseEntity<Produto> saveProduto(@RequestBody ProdutoRequestDTO data) {
+  public ResponseEntity<?> saveProduto(@RequestBody ProdutoRequestDTO data) {
     try {
       Produto produtoData = new Produto(data);
       repository.save(produtoData);
@@ -39,21 +40,25 @@ public class ProdutoController {
     }
 
     catch (Exception e) {
-      e.printStackTrace();
-      return new ResponseEntity<Produto>(HttpStatus.BAD_REQUEST);
+      String errorMessage = "Internal server error: " + e.getMessage();
+      CustomException errorResponse = new CustomException(errorMessage);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
   }
 
   // Get all products
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @GetMapping("getAllProducts")
-  public ResponseEntity<List<ProdutoResponseDTO>> getAll() {
+  public ResponseEntity<?> getAll() {
     try {
       List<ProdutoResponseDTO> produtoList = repository.findAll().stream().map(ProdutoResponseDTO::new)
           .toList();
       return new ResponseEntity<List<ProdutoResponseDTO>>(produtoList, HttpStatus.FOUND);
     } catch (Exception e) {
-      return new ResponseEntity<List<ProdutoResponseDTO>>(HttpStatus.NOT_FOUND);
+      String errorMessage = "Não foi possível verificar a lista de Produtos, tente novamente ! " + e.getMessage();
+      CustomException errorResponse = new CustomException(errorMessage);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+
     }
 
   }
@@ -61,43 +66,57 @@ public class ProdutoController {
   // Get the product by Id
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @GetMapping("/getProdutoById/{id_produto}")
-  public ResponseEntity<Produto> getBookById(@PathVariable Integer id_produto) {
-    Optional<Produto> produtoData = repository.findById(id_produto);
-    if (produtoData.isPresent()) {
-      return new ResponseEntity<>(produtoData.get(), HttpStatus.OK);
-    } else {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+  public ResponseEntity<?> getBookById(@PathVariable Integer id_produto) {
+    try {
+      Optional<Produto> produtoData = repository.findById(id_produto);
+      if (!produtoData.isPresent()) {
+        String errorMessage = "Não foi possível encontrar o seu pedido. Tente novamente !";
+        CustomException errorResponse = new CustomException(errorMessage);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+      }
+      return ResponseEntity.status(HttpStatus.FOUND).body(produtoData);
+
     }
+
+    catch (Exception e) {
+      String errorMessage = "Internal server error: " + e.getMessage();
+      CustomException errorResponse = new CustomException(errorMessage);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+
+    }
+
   }
 
   // Delete the Product by Id
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @DeleteMapping("deleteProduct/{id_produto}")
-  private ResponseEntity<String> deleteProduct(@PathVariable Integer id_produto) {
+  private ResponseEntity<?> deleteProduct(@PathVariable Integer id_produto) {
     try {
       boolean deleted = repository.existsById(id_produto);
 
       if (deleted) {
         repository.deleteById(id_produto);
-        return ResponseEntity.ok("Resouce Deleted successfully");
+        return ResponseEntity.ok("Produto deletado com sucesso!");
       }
 
       else {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Resouce Deleted successfully");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao deletar o produto, tente novamente!");
       }
     }
 
     catch (Exception e) {
-      e.printStackTrace();
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Resouce Deleted successfully");
+      String errorMessage = "Internal server error: " + e.getMessage();
+      CustomException errorResponse = new CustomException(errorMessage);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
 
     }
+
   }
 
   // Update the Product by Id
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @PutMapping("/updateProduct/{id_produto}")
-  private ResponseEntity<Produto> updateProdutoById(@PathVariable Integer id_produto,
+  private ResponseEntity<?> updateProdutoById(@PathVariable Integer id_produto,
       @RequestBody Produto newProdutoData) {
 
     try {
@@ -112,18 +131,22 @@ public class ProdutoController {
         updateProdutoData.setT_estoque_id_estoque(newProdutoData.getT_estoque_id_estoque());
 
         repository.save(updateProdutoData);
-        return new ResponseEntity<Produto>(updateProdutoData, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.FOUND).body(updateProdutoData);
       }
 
       else {
-        return new ResponseEntity<Produto>(HttpStatus.NOT_MODIFIED);
+        String errorMessage = "Não foi possível atualizar o Produto. Tente novamente!";
+        CustomException errorResponse = new CustomException(errorMessage);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
 
       }
     }
 
     catch (Exception e) {
-      e.printStackTrace();
-      return new ResponseEntity<Produto>(HttpStatus.NOT_MODIFIED);
+      String errorMessage = "Internal server error: " + e.getMessage();
+      CustomException errorResponse = new CustomException(errorMessage);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+
     }
   }
 }
