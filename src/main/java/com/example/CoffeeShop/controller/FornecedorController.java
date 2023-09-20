@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.CoffeeShop.model.Fornecedor.Fornecedor;
 import com.example.CoffeeShop.repository.FornecedorRepository;
+import com.example.CoffeeShop.service.Exception.CustomException;
 import com.example.CoffeeShop.service.FornecedorDTO.FornecedorRequestDTO;
 import com.example.CoffeeShop.service.FornecedorDTO.FornecedorResponseDTO;
 
@@ -31,7 +32,7 @@ public class FornecedorController {
   // Save the dealer
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @PostMapping("/postFornecedor")
-  public ResponseEntity<Fornecedor> saveFornecedor(@RequestBody FornecedorRequestDTO data) {
+  public ResponseEntity<?> saveFornecedor(@RequestBody FornecedorRequestDTO data) {
     try {
       Fornecedor fornecedorData = new Fornecedor(data);
       repository.save(fornecedorData);
@@ -39,8 +40,9 @@ public class FornecedorController {
     }
 
     catch (Exception e) {
-      e.printStackTrace();
-      return new ResponseEntity<Fornecedor>(HttpStatus.BAD_REQUEST);
+      String errorMessage = "Internal server error: " + e.getMessage();
+      CustomException errorResponse = new CustomException(errorMessage);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
 
   }
@@ -48,7 +50,7 @@ public class FornecedorController {
   // Get all dealers
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @GetMapping("/getAllFornecedor")
-  public ResponseEntity<List<FornecedorResponseDTO>> getAll() {
+  public ResponseEntity<?> getAll() {
     try {
 
       List<FornecedorResponseDTO> fornecedorList = repository.findAll().stream().map(FornecedorResponseDTO::new)
@@ -57,20 +59,31 @@ public class FornecedorController {
       return new ResponseEntity<List<FornecedorResponseDTO>>(fornecedorList, HttpStatus.FOUND);
 
     } catch (Exception e) {
-      e.printStackTrace();
-      return new ResponseEntity<List<FornecedorResponseDTO>>(HttpStatus.NOT_FOUND);
+      String errorMessage = "Internal server error: " + e.getMessage();
+      CustomException errorResponse = new CustomException(errorMessage);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
   }
 
   // Get the Dealer by Id
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @GetMapping("/getdealerById/{id_fornecedor}")
-  public ResponseEntity<Fornecedor> getBookById(@PathVariable Integer id_fornecedor) {
-    Optional<Fornecedor> fornecedorData = repository.findById(id_fornecedor);
-    if (fornecedorData.isPresent()) {
-      return new ResponseEntity<>(fornecedorData.get(), HttpStatus.OK);
-    } else {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+  public ResponseEntity<?> getBookById(@PathVariable Integer id_fornecedor) {
+    try {
+      Optional<Fornecedor> fornecedorData = repository.findById(id_fornecedor);
+      if (!fornecedorData.isPresent()) {
+        String errorMessage = "Não foi possível encontrar o cliente. Tente novamente !";
+        CustomException errorResponse = new CustomException(errorMessage);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+      }
+
+      return ResponseEntity.status(HttpStatus.FOUND).body(fornecedorData);
+
+    } catch (Exception e) {
+      String errorMessage = "Internal server error: " + e.getMessage();
+      CustomException errorResponse = new CustomException(errorMessage);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+
     }
   }
 
@@ -83,11 +96,11 @@ public class FornecedorController {
 
       if (deleted) {
         repository.deleteById(id_fornecedor);
-        return ResponseEntity.ok("Resouce Deleted successfully");
+        return ResponseEntity.ok("Forncedor deletado com sucesso!");
       }
 
       else {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Something went wrong, please try again");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao deletar o fornecedor, tente novamente!");
       }
     }
 
