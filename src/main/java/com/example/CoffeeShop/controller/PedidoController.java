@@ -1,8 +1,11 @@
 package com.example.CoffeeShop.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.autoconfigure.observation.ObservationProperties.Http;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.CoffeeShop.model.pedido.Pedido;
 import com.example.CoffeeShop.repository.PedidoRepository;
+import com.example.CoffeeShop.service.Exception.CustomException;
 import com.example.CoffeeShop.service.PedidoDTO.PedidoRequestDTO;
 import com.example.CoffeeShop.service.PedidoDTO.PedidoResponseDTO;
 
@@ -31,7 +35,7 @@ public class PedidoController {
   // Post the Client
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @PostMapping("addPedido/Pedido")
-  public ResponseEntity<Pedido> saveOrder(@RequestBody PedidoRequestDTO data) {
+  public ResponseEntity<?> saveOrder(@RequestBody PedidoRequestDTO data) {
     try {
       Pedido pedidoData = new Pedido(data);
       repository.save(pedidoData);
@@ -39,9 +43,9 @@ public class PedidoController {
       return new ResponseEntity<>(pedidoData, HttpStatus.CREATED);
 
     } catch (Exception e) {
-      e.printStackTrace();
-      return new ResponseEntity<Pedido>(HttpStatus.BAD_REQUEST);
-
+      String errorMessage = "Internal server error: " + e.getMessage();
+      CustomException errorResponse = new CustomException(errorMessage);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
 
   }
@@ -50,15 +54,16 @@ public class PedidoController {
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @GetMapping("getAllOrders")
 
-  public ResponseEntity<List<PedidoResponseDTO>> getAllOrders() {
+  public ResponseEntity<?> getAllOrders() {
     try {
       List<PedidoResponseDTO> pedidoList = repository.findAll().stream().map(PedidoResponseDTO::new)
           .toList();
 
       return new ResponseEntity<>(pedidoList, HttpStatus.OK);
     } catch (Error e) {
-      e.printStackTrace();
-      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+      String errorMessage = "Internal server error: " + e.getMessage();
+      CustomException errorResponse = new CustomException(errorMessage);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
 
     }
   }
@@ -66,19 +71,21 @@ public class PedidoController {
   // Get the client by Id
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @GetMapping("/getOrderById/{id_Pedido}")
-  public ResponseEntity<Pedido> getOrderById(@PathVariable Integer id_Pedido) {
+  public ResponseEntity<?> getOrderById(@PathVariable Integer id_Pedido) {
     try {
       Optional<Pedido> PedidoData = repository.findById(id_Pedido);
-      if (PedidoData.isPresent()) {
-        return new ResponseEntity<Pedido>(PedidoData.get(), HttpStatus.OK);
-      } else {
-        return new ResponseEntity<Pedido>(HttpStatus.NOT_FOUND);
+      if (!PedidoData.isPresent()) {
+        String errorMessage = "Não foi possível encontrar o seu pedido. Tente novamente !";
+        CustomException errorResponse = new CustomException(errorMessage);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
       }
-    }
 
-    catch (Exception e) {
-      e.printStackTrace();
-      return new ResponseEntity<Pedido>(HttpStatus.BAD_REQUEST);
+      return ResponseEntity.status(HttpStatus.FOUND).body(PedidoData);
+
+    } catch (Exception e) {
+      String errorMessage = "Internal server error: " + e.getMessage();
+      CustomException errorResponse = new CustomException(errorMessage);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
 
     }
 
@@ -92,16 +99,16 @@ public class PedidoController {
 
     if (deleted) {
       repository.deleteById(id_Pedido);
-      return ResponseEntity.ok("Resource deleted successfully");
+      return ResponseEntity.ok("Pedido deletado com sucesso !");
     } else {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Resource not found");
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não foi possível encontrar o pedido para ser deletado!");
     }
   }
 
   // Update the Client by Id
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @PutMapping("/updateOrderById/{id_Pedido}")
-  private ResponseEntity<Pedido> updateOrderById(@PathVariable Integer id_Pedido,
+  private ResponseEntity<?> updateOrderById(@PathVariable Integer id_Pedido,
       @RequestBody Pedido newPedidoData) {
 
     try {
@@ -115,17 +122,20 @@ public class PedidoController {
         updatePedidoData.setT_cliente_id_cliente(newPedidoData.getT_cliente_id_cliente());
         updatePedidoData.setT_notafiscal_id_notafiscal(newPedidoData.getT_notafiscal_id_notafiscal());
         repository.save(updatePedidoData);
-        return new ResponseEntity<Pedido>(updatePedidoData, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.FOUND).body(updatePedidoData);
 
       } else {
-        return new ResponseEntity<Pedido>(newPedidoData, HttpStatus.NOT_MODIFIED);
+        String errorMessage = "Não foi possível encontrar o seu pedido. Tente novamente !";
+        CustomException errorResponse = new CustomException(errorMessage);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
 
       }
     }
 
     catch (Exception e) {
-      e.printStackTrace();
-      return new ResponseEntity<Pedido>(HttpStatus.BAD_REQUEST);
+      String errorMessage = "Internal server error: " + e.getMessage();
+      CustomException errorResponse = new CustomException(errorMessage);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
 
     }
   }
