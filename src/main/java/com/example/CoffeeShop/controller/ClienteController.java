@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.CoffeeShop.model.cliente.Cliente;
 import com.example.CoffeeShop.repository.ClienteRepository;
+import com.example.CoffeeShop.service.Exception.CustomException;
 import com.example.CoffeeShop.service.clienteDTO.ClienteRequestDTO;
 import com.example.CoffeeShop.service.clienteDTO.ClienteResponseDTO;
 
@@ -31,7 +32,7 @@ public class ClienteController {
   // Post the Client
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @PostMapping("addUser/client")
-  public ResponseEntity<Cliente> saveCliente(@RequestBody ClienteRequestDTO data) {
+  public ResponseEntity<?> saveCliente(@RequestBody ClienteRequestDTO data) {
     try {
       Cliente clienteData = new Cliente(data);
       repository.save(clienteData);
@@ -39,8 +40,9 @@ public class ClienteController {
     }
 
     catch (Exception e) {
-      e.printStackTrace();
-      return new ResponseEntity<Cliente>(HttpStatus.BAD_REQUEST);
+      String errorMessage = "Internal server error: " + e.getMessage();
+      CustomException errorResponse = new CustomException(errorMessage);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
 
   }
@@ -48,7 +50,7 @@ public class ClienteController {
   // Get all clients
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @GetMapping("getAllClients")
-  public ResponseEntity<List<ClienteResponseDTO>> getAll() {
+  public ResponseEntity<?> getAll() {
     try {
       List<ClienteResponseDTO> clienteList = repository.findAll().stream().map(ClienteResponseDTO::new)
           .toList();
@@ -57,64 +59,77 @@ public class ClienteController {
     }
 
     catch (Exception e) {
-      e.printStackTrace();
-      return new ResponseEntity<List<ClienteResponseDTO>>(HttpStatus.BAD_REQUEST);
+      String errorMessage = "Internal server error: " + e.getMessage();
+      CustomException errorResponse = new CustomException(errorMessage);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
-
   }
 
   // Get the client by Id
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @GetMapping("getClient/{id_cliente}")
-  public ResponseEntity<Cliente> getBookById(@PathVariable Integer id_cliente) {
-    Optional<Cliente> clienteData = repository.findById(id_cliente);
-    if (clienteData.isPresent()) {
-      return new ResponseEntity<>(clienteData.get(), HttpStatus.OK);
-    } else {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+  public ResponseEntity<?> getBookById(@PathVariable Integer id_cliente) {
+    try {
+      Optional<Cliente> clienteData = repository.findById(id_cliente);
+      if (!clienteData.isPresent()) {
+        String errorMessage = "Não foi possível encontrar o cliente. Tente novamente !";
+        CustomException errorResponse = new CustomException(errorMessage);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+      }
+      return ResponseEntity.status(HttpStatus.FOUND).body(clienteData);
+    } catch (Exception e) {
+      String errorMessage = "Internal server error: " + e.getMessage();
+      CustomException errorResponse = new CustomException(errorMessage);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+
     }
   }
 
   // Delete the Client by Id
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @DeleteMapping("deleteClient/{id_cliente}")
-  private ResponseEntity<String> deleteCliente(@PathVariable Integer id_cliente) {
+  private ResponseEntity<?> deleteCliente(@PathVariable Integer id_cliente) {
     try {
       boolean deleted = repository.existsById(id_cliente);
 
       if (deleted) {
         repository.deleteById(id_cliente);
-        return ResponseEntity.ok("Resource deleted successfully");
+        return ResponseEntity.ok("Cliente deletado com sucesso !");
       } else {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Resource not found");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            .body("Não foi possível encontrar o cliente para ser deletado");
       }
     }
 
     catch (Exception e) {
-      e.printStackTrace();
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Something went wrong");
+      String errorMessage = "Internal server error: " + e.getMessage();
+      CustomException errorResponse = new CustomException(errorMessage);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+
     }
   }
 
   // Update the Client by Id
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @PutMapping("/updateClient/{id_cliente}")
-  private ResponseEntity<Cliente> updateClienteById(@PathVariable Integer id_cliente,
-      @RequestBody Cliente newFornecedorData) {
+  private ResponseEntity<?> updateClienteById(@PathVariable Integer id_cliente,
+      @RequestBody Cliente newClienteData) {
 
     try {
-      Optional<Cliente> oldFornecedorData = repository.findById(id_cliente);
+      Optional<Cliente> oldClienteData = repository.findById(id_cliente);
 
-      if (oldFornecedorData.isPresent()) {
-        Cliente updateFornecedorData = oldFornecedorData.get();
-        updateFornecedorData.setNm_cliente(newFornecedorData.getNm_cliente());
+      if (oldClienteData.isPresent()) {
+        Cliente updateClienteData = oldClienteData.get();
+        updateClienteData.setNm_cliente(newClienteData.getNm_cliente());
 
-        repository.save(updateFornecedorData);
-        return new ResponseEntity<Cliente>(updateFornecedorData, HttpStatus.OK);
+        repository.save(updateClienteData);
+        return ResponseEntity.status(HttpStatus.OK).body(updateClienteData);
       }
 
       else {
-        return new ResponseEntity<Cliente>(HttpStatus.BAD_REQUEST);
+        String errorMessage = "Não foi possível atualizar os dados do cliente. Tente novamente !";
+        CustomException errorResponse = new CustomException(errorMessage);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
       }
     }
 

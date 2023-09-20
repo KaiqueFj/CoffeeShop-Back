@@ -58,7 +58,7 @@ public class PedidoController {
 
       return new ResponseEntity<>(pedidoList, HttpStatus.OK);
     } catch (Error e) {
-      String errorMessage = "Internal server error: " + e.getMessage();
+      String errorMessage = "Não foi possível verificar a lista de usuários, tente novamente ! " + e.getMessage();
       CustomException errorResponse = new CustomException(errorMessage);
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
 
@@ -122,7 +122,7 @@ public class PedidoController {
         return ResponseEntity.status(HttpStatus.FOUND).body(updatePedidoData);
 
       } else {
-        String errorMessage = "Não foi possível encontrar o seu pedido. Tente novamente !";
+        String errorMessage = "Não foi possível atualizar o pedido. Tente novamente !";
         CustomException errorResponse = new CustomException(errorMessage);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
 

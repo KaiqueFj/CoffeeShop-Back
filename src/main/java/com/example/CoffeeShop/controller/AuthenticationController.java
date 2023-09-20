@@ -38,23 +38,25 @@ public class AuthenticationController {
   @CrossOrigin(origins = "http://localhost:3000")
 
   public ResponseEntity register(@RequestBody @Validated RegisterDTO data) {
-
+    String errorMessage = "Não foi possível criar sua conta, tente novamente !";
+    CustomException errorResponse = new CustomException(errorMessage);
     try {
       if (this.repository.findByLogin(data.login()) != null)
-        return ResponseEntity.badRequest().build();
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
 
       String encpryptedPassword = new BCryptPasswordEncoder().encode(data.ds_password());
       User newUser = new User(data.login(), encpryptedPassword, data.ds_role());
 
       this.repository.save(newUser);
 
-      return ResponseEntity.ok().build();
+      return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }
 
     catch (Exception e) {
-      String errorMessage = "Internal server error: " + e.getMessage();
-      CustomException errorResponse = new CustomException(errorMessage);
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+      String errMsg = "Não foi Possível fazer login, tente novamente " + e.getMessage();
+      CustomException errResp = new CustomException(errMsg);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errResp);
     }
   }
 
