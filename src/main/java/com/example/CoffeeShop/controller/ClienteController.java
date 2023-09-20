@@ -134,8 +134,10 @@ public class ClienteController {
     }
 
     catch (Exception e) {
-      e.printStackTrace();
-      return new ResponseEntity<Cliente>(HttpStatus.NOT_MODIFIED);
+      String errorMessage = "Internal server error: " + e.getMessage();
+      CustomException errorResponse = new CustomException(errorMessage);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+
     }
   }
 }

@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.CoffeeShop.model.cliente.Cliente;
 import com.example.CoffeeShop.model.notaFiscal.NotaFiscal;
 import com.example.CoffeeShop.repository.NotaFiscalRepository;
+import com.example.CoffeeShop.service.Exception.CustomException;
 import com.example.CoffeeShop.service.NotaFiscalDTO.NotaFiscalRequestDTO;
 import com.example.CoffeeShop.service.NotaFiscalDTO.NotaFiscalResponseDTO;
 
@@ -31,7 +33,7 @@ public class NotaFiscalController {
   // Post the Client
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @PostMapping("addNotaFiscal/invoice")
-  public ResponseEntity<NotaFiscal> saveInvoice(@RequestBody NotaFiscalRequestDTO data) {
+  public ResponseEntity<?> saveInvoice(@RequestBody NotaFiscalRequestDTO data) {
     try {
       NotaFiscal clienteData = new NotaFiscal(data);
       repository.save(clienteData);
@@ -39,14 +41,15 @@ public class NotaFiscalController {
     }
 
     catch (Exception e) {
-      return new ResponseEntity<NotaFiscal>(HttpStatus.BAD_REQUEST);
+      e.printStackTrace();
+      return new ResponseEntity<Cliente>(HttpStatus.NOT_MODIFIED);
     }
   }
 
   // Get all invoices
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @GetMapping("getAllInvoices")
-  public ResponseEntity<List<NotaFiscalResponseDTO>> getAllInvoices() {
+  public ResponseEntity<?> getAllInvoices() {
     try {
 
       List<NotaFiscalResponseDTO> notaFiscalList = repository.findAll().stream().map(NotaFiscalResponseDTO::new)
@@ -54,38 +57,53 @@ public class NotaFiscalController {
 
       return new ResponseEntity<List<NotaFiscalResponseDTO>>(notaFiscalList, HttpStatus.FOUND);
     } catch (Exception e) {
-      return new ResponseEntity<List<NotaFiscalResponseDTO>>(HttpStatus.BAD_REQUEST);
+      String errorMessage = "Internal server error: " + e.getMessage();
+      CustomException errorResponse = new CustomException(errorMessage);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+
     }
   }
 
   // Get the client by Id
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @GetMapping("/getInvoiceById/{id_notaFiscal}")
-  public ResponseEntity<NotaFiscal> getInvoiceById(@PathVariable Integer id_notaFiscal) {
-    Optional<NotaFiscal> NotaFiscalData = repository.findById(id_notaFiscal);
-    if (NotaFiscalData.isPresent()) {
-      return new ResponseEntity<>(NotaFiscalData.get(), HttpStatus.OK);
-    } else {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+  public ResponseEntity<?> getInvoiceById(@PathVariable Integer id_notaFiscal) {
+    try {
+      Optional<NotaFiscal> NotaFiscalData = repository.findById(id_notaFiscal);
+      if (!NotaFiscalData.isPresent()) {
+        String errorMessage = "Não foi possível encontrar a nota-fiscal. Tente novamente !";
+        CustomException errorResponse = new CustomException(errorMessage);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+      }
+
+      return ResponseEntity.status(HttpStatus.FOUND).body(NotaFiscalData);
+    }
+
+    catch (Exception e) {
+      String errorMessage = "Internal server error: " + e.getMessage();
+      CustomException errorResponse = new CustomException(errorMessage);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+
     }
   }
 
   // Delete the Client by Id
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @DeleteMapping("/deleteInvoice/{id_notaFiscal}")
-  private ResponseEntity<String> deleteInvoice(@PathVariable Integer id_notaFiscal) {
+  private ResponseEntity<?> deleteInvoice(@PathVariable Integer id_notaFiscal) {
     try {
       boolean deleted = repository.existsById(id_notaFiscal);
 
       if (deleted) {
         repository.deleteById(id_notaFiscal);
-        return ResponseEntity.ok("Resouce Deleted successfully");
+        return ResponseEntity.ok("Nota-Fiscal deletada com sucesso!");
       } else {
-        return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("Something went wrong, try again");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Não foi possível deletar a sua Nota-Fiscal");
       }
     } catch (Exception e) {
-      e.printStackTrace();
-      return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("Something went wrong, try again");
+      String errorMessage = "Internal server error: " + e.getMessage();
+      CustomException errorResponse = new CustomException(errorMessage);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
 
     }
 
@@ -94,7 +112,7 @@ public class NotaFiscalController {
   // Update the Client by Id
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @PutMapping("/updateInvoice/{id_notaFiscal}")
-  private ResponseEntity<NotaFiscal> updateClienteById(@PathVariable Integer id_notaFiscal,
+  private ResponseEntity<?> updateClienteById(@PathVariable Integer id_notaFiscal,
       @RequestBody NotaFiscal newNotaFiscalData) {
 
     try {
@@ -105,15 +123,19 @@ public class NotaFiscalController {
         updateNotaFiscalData.setNr_notafiscal(newNotaFiscalData.getNr_notafiscal());
         updateNotaFiscalData.setPedidos(newNotaFiscalData.getPedidos());
         repository.save(updateNotaFiscalData);
-        return new ResponseEntity<NotaFiscal>(updateNotaFiscalData, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(updateNotaFiscalData);
       } else {
-        return new ResponseEntity<NotaFiscal>(HttpStatus.BAD_REQUEST);
+        String errorMessage = "Não foi possível atualizar os dados do cliente. Tente novamente !";
+        CustomException errorResponse = new CustomException(errorMessage);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
       }
     }
 
     catch (Exception e) {
-      e.printStackTrace();
-      return new ResponseEntity<NotaFiscal>(HttpStatus.BAD_REQUEST);
+      String errorMessage = "Internal server error: " + e.getMessage();
+      CustomException errorResponse = new CustomException(errorMessage);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+
     }
   }
 }
