@@ -57,7 +57,7 @@ public class PedidoController {
           .toList();
 
       return new ResponseEntity<>(pedidoList, HttpStatus.OK);
-    } catch (Error e) {
+    } catch (Exception e) {
       String errorMessage = "Não foi possível verificar a lista de usuários, tente novamente ! " + e.getMessage();
       CustomException errorResponse = new CustomException(errorMessage);
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
