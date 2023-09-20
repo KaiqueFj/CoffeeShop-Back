@@ -7,7 +7,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.example.CoffeeShop.service.ProdutoDTO.ProdutoRequestDTO;
 import com.example.CoffeeShop.service.UserDTO.UserRequestDTO;
 
 import jakarta.persistence.Entity;
