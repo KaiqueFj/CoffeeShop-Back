@@ -1,6 +1,7 @@
 package com.example.CoffeeShop.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.CoffeeShop.Security.TokenService;
 import com.example.CoffeeShop.model.User.User;
 import com.example.CoffeeShop.repository.UserRepository;
+import com.example.CoffeeShop.service.Exception.CustomException;
 import com.example.CoffeeShop.service.UserDTO.AuthenticationDTO;
 import com.example.CoffeeShop.service.UserDTO.LoginResponseDTO;
 import com.example.CoffeeShop.service.UserDTO.RegisterDTO;
@@ -31,32 +33,48 @@ public class AuthenticationController {
   @Autowired
   private TokenService tokenService;
 
-  // Post the Client
-  @PostMapping("/login")
-  @CrossOrigin(origins = "http://localhost:3000")
-  public ResponseEntity login(@RequestBody @Validated AuthenticationDTO data) {
-
-    var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.ds_password());
-    var auth = this.authenticationManager.authenticate(usernamePassword);
-    var token = tokenService.generateToken((User) auth.getPrincipal());
-
-    return ResponseEntity.ok(new LoginResponseDTO(token));
-
-  }
-
+  // Register the client
   @PostMapping("/register")
   @CrossOrigin(origins = "http://localhost:3000")
 
   public ResponseEntity register(@RequestBody @Validated RegisterDTO data) {
-    if (this.repository.findByLogin(data.login()) != null)
-      return ResponseEntity.badRequest().build();
 
-    String encpryptedPassword = new BCryptPasswordEncoder().encode(data.ds_password());
-    User newUser = new User(data.login(), encpryptedPassword, data.ds_role());
+    try {
+      if (this.repository.findByLogin(data.login()) != null)
+        return ResponseEntity.badRequest().build();
 
-    this.repository.save(newUser);
+      String encpryptedPassword = new BCryptPasswordEncoder().encode(data.ds_password());
+      User newUser = new User(data.login(), encpryptedPassword, data.ds_role());
 
-    return ResponseEntity.ok().build();
+      this.repository.save(newUser);
 
+      return ResponseEntity.ok().build();
+    }
+
+    catch (Exception e) {
+      String errorMessage = "Internal server error: " + e.getMessage();
+      CustomException errorResponse = new CustomException(errorMessage);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+    }
   }
+
+  // Login the Client
+  @PostMapping("/login")
+  @CrossOrigin(origins = "http://localhost:3000")
+  public ResponseEntity login(@RequestBody @Validated AuthenticationDTO data) {
+    try {
+      var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.ds_password());
+      var auth = this.authenticationManager.authenticate(usernamePassword);
+      var token = tokenService.generateToken((User) auth.getPrincipal());
+      return ResponseEntity.ok(new LoginResponseDTO(token));
+
+    }
+
+    catch (Exception e) {
+      String errorMessage = "Internal server error: " + e.getMessage();
+      CustomException errorResponse = new CustomException(errorMessage);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+    }
+  }
+
 }
