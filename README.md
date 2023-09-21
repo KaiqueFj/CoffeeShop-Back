@@ -43,3 +43,8 @@ $ git clone https://github.com/KaiqueFj/CoffeeShop-Back.git
 ![image](https://github.com/KaiqueFj/CoffeeShop-Back/assets/78966558/2e7f7f0d-5d21-44fd-b24e-9981b0ec0659)
 
 **That´s all folks ;)**
+
+
+<p align="center">
+  <img src="https://cdn.iconscout.com/icon/free/png-256/free-coffee-1199-1182164.png"alt="Sublime's custom image"/>
+</p>
