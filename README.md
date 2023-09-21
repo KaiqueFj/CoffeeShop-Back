@@ -12,7 +12,7 @@
 - Maven
 - MysqlWorkbench
 
-# Features
+# Funções no aplicativo
 
 - Create, Read, Update, delete de todos os models do projeto, sendo alguns deles: Funcionario, Produto, Pedido, Nota-Fiscal...
 - Encriptação de senha assim que o registro do usuário é criado, onde nem mesmo o desenvolvedor e ninguem da empresa tem acesso, garantindo assim, dados sensíveis seguros e integros.
