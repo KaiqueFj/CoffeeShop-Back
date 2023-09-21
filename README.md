@@ -30,8 +30,6 @@ $ git clone https://github.com/KaiqueFj/CoffeeShop-Back.git
 
 ```
 
-**That´s all folks ;)**
-
 ## Exemplo da tabela Pedidos
 
 ![image](https://github.com/KaiqueFj/CoffeeShop-Back/assets/78966558/caec2697-b768-412d-b944-9782a4f6767d)
@@ -43,3 +41,5 @@ $ git clone https://github.com/KaiqueFj/CoffeeShop-Back.git
 ## Estruturação do projeto
 
 ![image](https://github.com/KaiqueFj/CoffeeShop-Back/assets/78966558/2e7f7f0d-5d21-44fd-b24e-9981b0ec0659)
+
+**That´s all folks ;)**
